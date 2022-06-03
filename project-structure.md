@@ -63,20 +63,24 @@ As an auth user, I can add a description and image to the pins for more informat
 ### Routes Sketch
 
 // GET ROUTES
--router.get(‘/‘)
--router.get(‘/me’)
--router.get(‘/:id’)
--router.get("/:lat/:lon")
--router.get("/:id/favourited_maps")
+
+- router.get(‘/‘)
+- router.get(‘/me’)
+- router.get(‘/:id’)
+- router.get("/:lat/:lon")
+- router.get("/:id/favourited_maps")
 
 // POST ROUTES
--router.post('/')
--router.post('/logout')
--router.post("/:map_id"
+
+- router.post('/')
+- router.post('/logout')
+- router.post("/:map_id"
 
 // Somehow we gotta find a way to edit the location ( I think we’re talking about the users location)
--router.patch(‘/:id’)
+
+- router.patch(‘/:id’)
 
 // DELETE ROUTES
--router.delete('/:id')
--router.delete("/:pin_id/:map_id")
+
+- router.delete('/:id')
+- router.delete("/:pin_id/:map_id")
