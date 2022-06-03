@@ -64,7 +64,24 @@ module.exports = (db) => {
   });
 
   // Will add edit once I get a hang of it TODO <---
-  // Implement me
+  //PATCH edit user location
+  router.patch("/:id", (req, res) => {
+    const user_id = req.params.id;
+    const { latitude, longitude } = req.body;
+    const queryString = `
+    UPDATE maps SET name = $1, area = $2
+    WHERE owner_id = $3
+    AND maps_id = $4
+    RETURNING *;`;
+    db.query(queryString, [latitude, longitude, user_id])
+      .then((data) => {
+        const maps = data.rows;
+        res.json(maps);
+      })
+      .catch((err) => {
+        res.status(500).json({ error: err.message });
+      });
+  });
 
   return router;
 };
