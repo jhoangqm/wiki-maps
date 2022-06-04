@@ -99,10 +99,10 @@ module.exports = (db) => {
     const queryString = `DELETE FROM pins WHERE id = $1;`;
     db.query(queryString, [user_id])
       .then((data) => {
-        res.json({ deleted: true });
+        res.json(user_id);
       })
       .catch((err) => {
-        res.status(500).json({ deleted: false, error: err });
+        res.status(500).json({ error: err.message });
       });
   });
 
