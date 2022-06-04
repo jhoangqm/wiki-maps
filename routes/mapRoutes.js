@@ -100,7 +100,7 @@ module.exports = (db) => {
         res.json({ deleted: true });
       })
       .catch((err) => {
-        res.status(500).json({ deleted: false });
+        res.status(500).json({ deleted: false, error: err });
       });
   });
 
