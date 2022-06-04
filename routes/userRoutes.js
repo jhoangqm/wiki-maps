@@ -8,11 +8,17 @@
 const express = require("express");
 const router = express.Router();
 
+// Rough sketch of routes, subject to change (Possibly)
+// All SQL has been tested via psql and they work,
+// routes might not work because they haven't been tested
 module.exports = (db) => {
   // GET the current user
   router.get("/me", (req, res) => {
     const user_id = req.session.user_id;
-    const queryString = `SELECT * FROM users WHERE id = $1;`;
+    const queryString = `
+    SELECT *
+    FROM users
+    WHERE id = $1;`;
     db.query(queryString, [user_id])
       .then((data) => {
         const currUser = data.rows[0];
@@ -26,7 +32,9 @@ module.exports = (db) => {
   // GET users from DB
   router.get("/", (req, res) => {
     const user_id = req.params.user_id;
-    const queryString = `SELECT * FROM users;`;
+    const queryString = `
+    SELECT *
+    FROM users;`;
     db.query(queryString, [user_id])
       .then((data) => {
         const users = data.rows;
@@ -63,7 +71,6 @@ module.exports = (db) => {
       });
   });
 
-  // Will add edit once I get a hang of it TODO <---
   //PATCH edit user location
   router.patch("/:id", (req, res) => {
     const user_id = req.params.id;

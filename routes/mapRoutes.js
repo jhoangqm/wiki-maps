@@ -8,6 +8,10 @@
 const express = require("express");
 const router = express.Router();
 
+// Rough sketch of routes, subject to change (Possibly)
+// All SQL has been tested via psql and they work,
+// routes might not work because they haven't been tested
+
 module.exports = (db) => {
   // GET all maps from DB
   router.get("/", (req, res) => {

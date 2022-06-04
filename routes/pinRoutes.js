@@ -1,10 +1,15 @@
 const express = require("express");
 const router = express.Router();
 
+// Rough sketch of routes, subject to change (Possibly)
+// All SQL has been tested via psql and they work,
+// routes might not work because they haven't been tested
 module.exports = (db) => {
   // GET all pins from DB
   router.get("/", (req, res) => {
-    const queryString = `SELECT * FROM pins;`;
+    const queryString = `
+    SELECT *
+    FROM pins;`;
     db.query(queryString)
       .then((data) => {
         const pins = data.rows;
@@ -18,7 +23,8 @@ module.exports = (db) => {
   // GET all pins for user
   router.get("/:id", (req, res) => {
     const user_id = req.params.id;
-    const queryString = `SELECT *
+    const queryString = `
+    SELECT *
     FROM pins
     WHERE id = $1;`;
     db.query(queryString, [user_id])
@@ -41,7 +47,8 @@ module.exports = (db) => {
       image_url,
       map_id,
     } = req.body;
-    const queryString = `INSERT INTO pins (
+    const queryString = `
+    INSERT INTO pins (
       owner_id, title, descripion, latitude, longitude, image_url, map_id)
       VALUES
       ($1, $2, $3, $4, $5, $6)
@@ -68,7 +75,8 @@ module.exports = (db) => {
     const user_ids = req.params.id;
     const { user_id, title, description, latitude, longitude, image } =
       req.body;
-    const queryString = `UPDATE pins
+    const queryString = `
+    UPDATE pins
     SET title = $1,
     description = $2,
     latitude = $3,
@@ -96,7 +104,9 @@ module.exports = (db) => {
   // POST delete pin
   router.delete("/:id", (req, res) => {
     const user_id = req.params.id;
-    const queryString = `DELETE FROM pins WHERE id = $1;`;
+    const queryString = `
+    DELETE FROM pins
+    WHERE id = $1;`;
     db.query(queryString, [user_id])
       .then((data) => {
         res.json(user_id);
