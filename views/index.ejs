@@ -23,9 +23,11 @@
   <script type="text/javascript" src="/scripts/app.js"></script>
 </head>
 
+<%- include("partials/_header") %>
 <body>
-  <%- include("partials/_header") %>
-  <div id="map"></div>
+  <div class="body-content">
+    <div class="map-content">
+  <div id="map">
   <script>
     const map = L.map('map').setView([43.6478463,-79.3807361], 16);
 
@@ -34,21 +36,26 @@
     attribution: '© OpenStreetMap'
   }).addTo(map);
   </script>
-  <!-- Nav Bar --->
-
-  <div id="map_selections">
-    <div class='nav'>
-      <nav class='bar'>
-        <div class='top'>
-          <h1> Map This! </h1>
-        </div>
-        <div class='sidebar'>
-        <button>Maps 1</button>
-      </div>
-      </nav>
-    </div>
   </div>
-
+  <div class="map-description-box">
+    <small>Created By: User</small>
+    <small>Created On: 00-00-0000</small>
+    <label for="description">Description: this describes the contents of the map</label>
+    <!-- <textarea id="map-description" name="map-description"></textarea> -->
+  </div>
+</div>
+  <!-- Nav Bar --->
+  <div class="side-nav">
+    <div class="side-nav-header">All Maps</div>
+      <ul>
+        <li><a href="#">Map 1</a></li>
+        <li><a href="#">Map 2</a></li>
+        <li><a href="#">Map 3</a></li>
+      </ul>
+      </div>
+    </div> 
+</div>
+</div>
 
 
 </body>

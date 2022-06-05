@@ -1,6 +1,14 @@
-div#map {
-  height: 100vh;
-  width: 100vw;
-  float: left;
+#map {
+  display: flex;
+  flex-direction: column-reverse;
+  height: 85vh;
+  width: 80vw;
   padding-right: 0vw;
+}
+
+.map-description-box{
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1em;
+  font-size: 20px;
 }
