@@ -1,0 +1,42 @@
+button {
+
+}
+
+nav{
+ float: right;
+}
+
+nav.bar {
+  color: white;
+  width: 18vw;
+  height: 100vh;
+  padding: 1.3em;
+  margin-right: 0;
+  justify-content: center;
+}
+
+.bar {
+  overflow:auto;
+}
+
+
+.top{
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  vertical-align: top;
+}
+
+.sidebar{
+  align-items: center;
+  justify-content: center;
+  display: contents;
+}
+
+.nav-btn {
+  float: left;
+  border: none;
+  cursor: pointer;
+  z-index: 100;
+  font-size: large;
+}

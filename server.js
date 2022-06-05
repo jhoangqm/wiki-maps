@@ -66,6 +66,7 @@ app.get("/login/:id", (req, res) => {
 app.post("/logout", (req, res) => {
   req.session = null;
   res.redirect("/");
+  console.log("Logged out!");
 });
 
 app.listen(PORT, () => {
