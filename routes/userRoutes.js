@@ -5,6 +5,7 @@
  * See: https://expressjs.com/en/guide/using-middleware.html#middleware.router
  */
 
+const bcrypt = require("bcryptjs");
 const express = require("express");
 const router = express.Router();
 
