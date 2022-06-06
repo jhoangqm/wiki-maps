@@ -13,7 +13,11 @@ const cookieSession = require("cookie-session");
 const { Pool } = require("pg");
 const dbParams = require("./lib/db.js");
 const db = new Pool(dbParams);
-db.connect();
+db.connect()
+  .then(() => {
+    console.log(`Connected to ${dbParams.database} database`);
+  })
+  .catch(() => console.log("Error while connecting to DB please try again"));
 
 // Load the logger first so all (static) HTTP requests are logged to STDOUT
 // 'dev' = Concise output colored by response status for development use.
