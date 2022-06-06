@@ -19,16 +19,19 @@ module.exports = (db) => {
     if (user_id === undefined || !user_id) {
       return res.send({ message: "Please login" });
     }
-    res.send({ message: "User already logged in" });
+    res.redirect("/");
   });
 
   // POST login method
   router.post("/login", (req, res) => {
     const { username, password } = req.body;
+    console.log(req.body);
     const queryString = `SELECT * FROM users WHERE username = $1;`;
-    db.query(queryString, [username, password])
+    db.query(queryString, [username])
       .then((data) => {
         const user = data.rows[0];
+        console.log(data.rows[0]);
+
         if (!user) {
           return res
             .status(400)
@@ -42,8 +45,9 @@ module.exports = (db) => {
             .status(400)
             .send({ message: "Password does not match username" });
         }
+        console.log(req.session.user_id);
         req.session.user_id = user.id;
-        res.send({ message: "Login succesfully" });
+        res.redirect("/");
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
@@ -76,7 +80,41 @@ module.exports = (db) => {
     db.query(queryString, [user_id])
       .then((data) => {
         const users = data.rows;
-        res.json(users, user_id);
+        res.json({ users, user_id });
+      })
+      .catch((err) => {
+        res.status(500).json({ error: err.message });
+      });
+  });
+
+  // Register user to DB
+  router.post("/register", (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username.length || !password.length) {
+      return res.status(400).send({ error: "Please try again" });
+    }
+
+    db.query(`SELECT * from users WHERE username = $1`, [username])
+      .then((data) => {
+        const username = data.rows[0];
+        // Check if username exists in the DB and return error message
+        if (username)
+          return res.status(403).send({ error: "Username already exists" });
+        // Otherwise create username and hash the password
+        const hashedPassword = bcrypt.hashSync(password, 10);
+        db.query(
+          `INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *`,
+          [username, hashedPassword]
+        )
+          .then((data) => {
+            const user = data.rows[0];
+            req.session.user_id = user.id;
+            return res.send({ message: "User registered", data: user });
+          })
+          .catch((err) => {
+            res.status(500).json({ error: err.message });
+          });
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
@@ -109,24 +147,29 @@ module.exports = (db) => {
       });
   });
 
-  //PATCH edit user location
-  router.patch("/:id", (req, res) => {
-    const user_id = req.params.id;
-    const { latitude, longitude } = req.body;
-    const queryString = `
-    UPDATE maps SET name = $1, area = $2
-    WHERE owner_id = $3
-    AND maps_id = $4
-    RETURNING *;`;
-    db.query(queryString, [latitude, longitude, user_id])
-      .then((data) => {
-        const maps = data.rows;
-        res.json(maps);
-      })
-      .catch((err) => {
-        res.status(500).json({ error: err.message });
-      });
+  router.post("/logout", (req, res) => {
+    req.session = null;
+    res.send({ message: "Logged out!" });
   });
+
+  // //PATCH edit user location ( this is a stretch for now )
+  // router.patch("/:id", (req, res) => {
+  //   const user_id = req.params.id;
+  //   const { latitude, longitude } = req.body;
+  //   const queryString = `
+  //   UPDATE maps SET name = $1, area = $2
+  //   WHERE owner_id = $3
+  //   AND maps_id = $4
+  //   RETURNING *;`;
+  //   db.query(queryString, [latitude, longitude, user_id])
+  //     .then((data) => {
+  //       const maps = data.rows;
+  //       res.json(maps);
+  //     })
+  //     .catch((err) => {
+  //       res.status(500).json({ error: err.message });
+  //     });
+  // });
 
   return router;
 };
