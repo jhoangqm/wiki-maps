@@ -22,6 +22,7 @@
 
   <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
   <script type="text/javascript" src="/scripts/app.js"></script>
+  
 </head>
 
 <%- include("partials/_header") %>
@@ -60,9 +61,10 @@
 
 <!-- Login modal -->
 <div class="popup-overlay"></div>
+<div class="login-modal">
 <div class="popup">
   <div>
-    <div class="close">&times;</div>
+    <div class="close-login">&times;</div>
     <h1 id="login-header">Login</h1>
     <form class="login-form" action="#">
       <div class="info">
@@ -79,12 +81,13 @@
     </form>
   </div>
 </div>
+</div>
 
 <!-- Register modal  -->
-<!-- <div class="registration-modal">
+<div class="register-modal">
  <div class="popup">
   <div>
-    <div class="close">&times;</div>
+    <div class="close-register">&times;</div>
     <h2 id="register-header">Register</h2>
     <form class="register-form" action="#">
       <div class="info">
@@ -105,22 +108,9 @@
     </form>
   </div>
 </div>
-</div> -->
-
+</div>
+<script type="text/javascript" src="/scripts/modal.js"></script>
 </body>
-<script>
-  document.querySelector('.close').addEventListener('click', function(){
-    document.querySelector('.popup').style.display = 'none';
-    document.querySelector('.popup-overlay').style.display = 'none';
-  })
-document.getElementById('login-btn').addEventListener('click', function(){
-  document.querySelector('.popup').style.display = 'block';
-  document.querySelector('.popup-overlay').style.display = 'block';
-})
-document.getElementById('register-btn').addEventListener('click', function(){
-  document.querySelector('.registration-modal').style.display = 'block';
-  document.querySelector('.popup-overlay').style.display = 'block';
-})
-</script>
 
 </html>
+
