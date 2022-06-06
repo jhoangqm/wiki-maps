@@ -1,4 +1,5 @@
-.login-popup-overlay{
+// All modals
+.popup-overlay{
     display: flex;
     position: fixed;
     top: 0px;
@@ -7,10 +8,10 @@
     height: 100vh;
     z-index: 10;
     background:rgba(0, 0, 0, 0.4);
-    display: none;
+    // display: none;
 }
 
-.login-popup{
+.popup{
     position: absolute;
     top: 50%;
     left: 35%;
@@ -18,7 +19,7 @@
     z-index: 30;
     background: #f5f5f5;
     width: 500px;
-    height: 400px;
+    height: 600px;
     box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.2);
 }
 
@@ -36,21 +37,35 @@
     cursor: pointer;
 }
 
-#login-header{
-    text-align: center;
-    padding: 30px;
-}
-.login-info{
+.info{
     text-align: center;
     padding: 20px;
     display: block;
 }
 
-.login-info input{
+.info input{
     width: 100%;
     padding: 8px 10px;
     box-sizing: border-box;
     outline: none;
     border: 1px solid #aaa;
     border-radius: 5px;
+}
+
+// Login modal
+#login-header{
+    text-align: center;
+    padding: 30px;
+}
+
+// Registration modal
+
+#register-header{
+    text-align: center;
+    padding: 30px;
+}
+
+.submit:hover{
+    cursor: pointer;
+    background-color: #555353;
 }
