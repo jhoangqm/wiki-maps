@@ -13,7 +13,11 @@ const cookieSession = require("cookie-session");
 const { Pool } = require("pg");
 const dbParams = require("./lib/db.js");
 const db = new Pool(dbParams);
-db.connect();
+db.connect()
+  .then(() => {
+    console.log(`Connected to ${dbParams.database} database`);
+  })
+  .catch(() => console.log("Error while connecting to DB please try again"));
 
 // Load the logger first so all (static) HTTP requests are logged to STDOUT
 // 'dev' = Concise output colored by response status for development use.
@@ -55,7 +59,7 @@ const mapsRoutes = require("./routes/mapRoutes");
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own
 
-app.use("/api/user", usersRoutes(db));
+app.use("/api/users", usersRoutes(db));
 app.use("/api/maps", mapsRoutes(db));
 // app.use("/api/pins", pinsRoutes(db));
 // app.use("/api/mapPins", mapPinsRoutes(db));
@@ -74,12 +78,6 @@ app.get("/", (req, res) => {
 // app.get("/login/:id", (req, res) => {
 //   req.session.user_id = req.params.id;
 //   res.redirect("/");
-// });
-
-// app.post("/logout", (req, res) => {
-//   req.session = null;
-//   res.redirect("/");
-//   console.log("Logged out!");
 // });
 
 app.listen(PORT, () => {
