@@ -1,0 +1,17 @@
+
+
+#map {
+  display: flex;
+  flex-direction: column-reverse;
+  height: 85vh;
+  width: 85vw;
+  padding-right: 0vw;
+  z-index: 1;
+}
+
+.map-description-box{
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1em;
+  font-size: 20px;
+}

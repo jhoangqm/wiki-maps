@@ -1,0 +1,71 @@
+// All modals
+.popup-overlay{
+  display: flex;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+  background:rgba(0, 0, 0, 0.4);
+}
+
+.popup{
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  transform: translate(-50%, -40%);
+  z-index: 30;
+  background: #f5f5f5;
+  width: 500px;
+  height: 500px;
+  box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.2);
+  border-radius: 5%;
+}
+
+.close{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 50px;
+  height: 50px;
+  color: #000000;
+  font-size: 40px;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.info{
+  text-align: center;
+  padding: 20px;
+  display: block;
+}
+
+.info input{
+  width: 100%;
+  padding: 8px 10px;
+  box-sizing: border-box;
+  outline: none;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+}
+
+// Login modal
+#login-header{
+  text-align: center;
+  padding: 30px;
+}
+
+// Registration modal
+
+#register-header{
+  text-align: center;
+  padding: 30px;
+}
+
+.submit:hover{
+  cursor: pointer;
+  background-color: #2d45b1;
+}
