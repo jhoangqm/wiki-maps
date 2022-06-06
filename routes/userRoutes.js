@@ -29,8 +29,8 @@ module.exports = (db) => {
     const queryString = `SELECT * FROM users WHERE username = $1;`;
     db.query(queryString, [username])
       .then((data) => {
-        console.log(data);
         const user = data.rows[0];
+        console.log(data.rows[0]);
 
         if (!user) {
           return res
