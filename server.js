@@ -71,16 +71,16 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-app.get("/login/:id", (req, res) => {
-  req.session.user_id = req.params.id;
-  res.redirect("/");
-});
+// app.get("/login/:id", (req, res) => {
+//   req.session.user_id = req.params.id;
+//   res.redirect("/");
+// });
 
-app.post("/logout", (req, res) => {
-  req.session = null;
-  res.redirect("/");
-  console.log("Logged out!");
-});
+// app.post("/logout", (req, res) => {
+//   req.session = null;
+//   res.redirect("/");
+//   console.log("Logged out!");
+// });
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
