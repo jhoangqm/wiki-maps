@@ -2,7 +2,7 @@ nav{
   display: flex;
   width: 100%;
   height: 10vh;
-  // flex-direction: row ;
+ 
   justify-content: space-between;
   align-items: center;
   background-color: rgb(121, 108, 93);
@@ -13,10 +13,10 @@ nav{
   margin: 2em;
 }
 .btn-dark{
-  // color: rgb(216, 199, 177);
-  border: 3px solid rgb(136, 127, 114);
-  padding: 15px 20px;
+  border: 4px solid rgb(136, 127, 114);
+  padding: 15px 30px;
   font-size: 20px;
+
 }
 
 // Side Nav
@@ -25,7 +25,7 @@ nav{
   height: 75px;
 }
 .side-nav{
-  flex: 1;
+  width: 15vw;
   height: 90vh;
 background-color: rgb(121, 108, 93);
 }
