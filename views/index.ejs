@@ -81,23 +81,19 @@
 </div>
 
 <!-- Register modal  -->
-<!-- <div class="registration-modal">
+<div class="registration-modal">
  <div class="popup">
   <div>
     <div class="close">&times;</div>
     <h2 id="register-header">Register</h2>
-    <form class="register-form" action="#">
+    <form class="register-form" action="/api/users/register" method="POST">
       <div class="info">
         <label for="username">Username</label>
-      <input type="username" placeholder="Userame">
-    </div>
-    <div class="info">
-      <label for="email">Email</label>
-      <input type="email" placeholder="email">
+      <input name="username" type="username" placeholder="Username">
     </div>
     <div class="info">
       <label for="password">Password</label>
-      <input type="password" placeholder="password">
+      <input name="password" type="password" placeholder="password">
     </div>
       <div class="info">
       <input class="submit" type="submit" value="Sign Up">
@@ -105,7 +101,7 @@
     </form>
   </div>
 </div>
-</div> -->
+</div>
 
 </body>
 <script>
