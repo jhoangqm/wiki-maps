@@ -8,29 +8,29 @@
     height: 100vh;
     z-index: 10;
     background:rgba(0, 0, 0, 0.4);
-    // display: none;
 }
 
 .popup{
     position: absolute;
     top: 50%;
-    left: 35%;
+    left: 40%;
     transform: translate(-50%, -40%);
     z-index: 30;
     background: #f5f5f5;
     width: 500px;
-    height: 600px;
+    height: 500px;
     box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.2);
+    border-radius: 5%;
 }
 
 .close{
     position: absolute;
     top: 0px;
     right: 0px;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     color: #000000;
-    font-size: 30px;
+    font-size: 40px;
     font-weight: 600;
     text-align: center;
     border-radius: 50%;
@@ -67,5 +67,5 @@
 
 .submit:hover{
     cursor: pointer;
-    background-color: #555353;
+    background-color: #2d45b1;
 }
