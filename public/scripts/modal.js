@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
 
  //  Close Login Modal 
-
  function closeLoginModal() {
     document.querySelector('.login-modal').style.display = 'none';
     document.querySelector('.popup-overlay').style.display = 'none';
@@ -37,7 +36,6 @@ document.getElementById('login-btn').addEventListener('click', openLoginModal);
 
 // Open Register Event Listener
 document.getElementById('register-btn').addEventListener('click', openRegisterModal);
-console.log('test');
 });
 
 
