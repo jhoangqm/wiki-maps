@@ -67,14 +67,14 @@ const renderPins = () => {
   <div class="pin-form-container">
   <form class="pin-form">
     <label for="title"> Pin Name:</label><br>
-    <input type="text" name="title" id="name" placeholder="New Pin"/><br>
+    <input type="title" name="title" id="name" placeholder="New Pin"/><br>
     <input type="textarea" name="description" placeholder="description"/><br>
-    <input type="text" name="image_url" id="image" placeholder="image url" /><br>
+    <input type="image_url" name="image_url" id="image" placeholder="image url" /><br>
     <label for="latitude" class="pinlat" hidden></label><br>
-    <input type="text" class="pinlat" name="latitude" hidden />
+    <input type="text" class="pinlat" name="latitude" hidden/>
     <label for="longitude" class="pinlng" hidden></label><br>
     <input type="text" class="pinlng" name="longitude" hidden/>
-    <input type="text" id="form-map-id" name="map_id" hidden />
+    <input type="text" id="form-map-id" name="map_id" hidden/>
     <button class="submit" type="submit">submit</button>
   </form>
 </div>
