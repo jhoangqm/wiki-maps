@@ -30,20 +30,12 @@
   <div class="body-content">
     <div class="map-content">
   <div id="map">
-  <script>
-    const map = L.map('map').setView([43.6478463,-79.3807361], 16);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '© OpenStreetMap'
-  }).addTo(map);
-  </script>
+  <script type="text/javascript" src="/scripts/leaflet.js"></script>
   </div>
   <div class="map-description-box">
     <small>Created By: User</small>
     <small>Created On: 00-00-0000</small>
     <label for="description">Description: this describes the contents of the map</label>
-    <!-- <textarea id="map-description" name="map-description"></textarea> -->
   </div>
 </div>
   <!-- Nav Bar --->
