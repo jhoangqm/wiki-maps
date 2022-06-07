@@ -1,7 +1,6 @@
 $(function () {
   // calling map function
   window.map = implementMap();
-
   createPins();
 });
 
@@ -9,9 +8,11 @@ const createPins = () => {};
 const renderPins = () => {
   renderPins();
 };
+
+//Pin form that can be called when rendering a marker
 const $pinForm = `
   <form class="pinForm">
-  <input type="hidden" name="owner_id" value="${user_id}" />
+  <input type="hidden" name="owner_id" value="#" />
   <label for="title">Pin Name:</label><br><br>
   <input type="text" name="title" id="name" placeholder="New Pin" /><br><br>
   <label for="description">Description:</label><br><br>
