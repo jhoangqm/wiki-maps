@@ -15,6 +15,10 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
   integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
   crossorigin=""/>
+   <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+ integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+ crossorigin=""></script>
 
    <!-- Make sure you put this AFTER Leaflet's CSS -->
  <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
@@ -26,12 +30,47 @@
   <script type="text/javascript" src="/scripts/leaflet.js"></script>
   <script type="text/javascript" src="/scripts/modals.js"></script>
   <script type="text/javascript" src="/scripts/app.js"></script>
+
 </head>
 
+<%- include("partials/_header") %>
 <body>
   <div class="body-content">
     <div class="map-content">
-  <div id="map"></div>
+  <div id="map">
+  <script type="text/javascript" src="/scripts/leaflet.js"></script>
+  </div>
+  <div class="map-description-box">
+    <small>Created By: User</small>
+    <small>Created On: 00-00-0000</small>
+    <label for="description">Description: this describes the contents of the map</label>
+  </div>
+</div>
+  <!-- Nav Bar --->
+  <div class="side-nav">
+    <div class="side-nav-header">All Maps</div>
+      <ul>
+        <li><a href="#">Map 1</a></li>
+        <li><a href="#">Map 2</a></li>
+        <li><a href="#">Map 3</a></li>
+      </ul>
+      </div>
+    </div>
+</div>
+</div>
+
+<!-- Login modal -->
+<div>
+  <%- include("login_modal") %>
+</div>
+
+<!-- Register modal  -->
+<div>
+<%- include("register_modal") %>
+</div>
+<script type="text/javascript" src="/scripts/modal.js"></script>
 </body>
 
+
 </html>
+
