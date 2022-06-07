@@ -32,6 +32,21 @@ const createPins = () => {
     markArr.push(marker);
     marker.bindPopup(renderPins()).openPopup();
     console.log(markArr);
+
+    $(".pin-form").on("submit", function (e) {
+      e.preventDefault();
+
+      let content = $(this).serialize();
+      console.log(content);
+
+      return $.post(`/api/pins`, (data) => {
+        console.log(data);
+        window.markers.push(marker);
+        marker.closePopup();
+        marker.unbindPopup();
+        marker.bindPopup(data.content);
+      });
+    });
   });
 
   // var popup = L.popup();
@@ -53,15 +68,14 @@ const renderPins = () => {
   <form class="pin-form">
     <label for="title"> Pin Name:</label><br>
     <input type="text" name="title" id="name" placeholder="New Pin"/><br>
-    <input type='text' name="description" placeholder="description"/><br>
+    <input type="textarea" name="description" placeholder="description"/><br>
     <input type="text" name="image_url" id="image" placeholder="image url" /><br>
     <label for="latitude" class="pinlat" hidden></label><br>
     <input type="text" class="pinlat" name="latitude" hidden />
     <label for="longitude" class="pinlng" hidden></label><br>
     <input type="text" class="pinlng" name="longitude" hidden/>
     <input type="text" id="form-map-id" name="map_id" hidden />
-    <button class="submit_popup" type="submit">submit</button>
-    <button class="cancel" type="cancel">cancel</button>
+    <button class="submit" type="submit">submit</button>
   </form>
 </div>
     `;
