@@ -37,7 +37,8 @@ module.exports = (db) => {
       });
   });
   // POST add pin
-  router.post("/", (req, res) => {
+  router.post("/:id", (req, res) => {
+    const pin_id = req.params.id;
     const {
       owner_id,
       title,
@@ -52,7 +53,7 @@ module.exports = (db) => {
       owner_id, title, descripion, latitude, longitude, image_url, map_id)
       VALUES
       ($1, $2, $3, $4, $5, $6)
-      RETURNING id;`;
+      RETURNING *;`;
     db.query(queryString, [
       owner_id,
       title,
@@ -61,9 +62,11 @@ module.exports = (db) => {
       longitude,
       image_url,
       map_id,
+      pin_id,
     ])
       .then((data) => {
-        const pins = data.rows;
+        const pins = data.rows[0];
+        console.log(data.rows[0]);
         res.json(pins);
       })
       .catch((err) => {

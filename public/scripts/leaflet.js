@@ -1,27 +1,33 @@
 $(function () {
   // calling map function
-  let map = implementMap();
+  window.map = implementMap();
 
-  // generates pins on click
-
-  let markArr = [];
-  map.on("click", (event) => {
-    let marker = L.marker([event.latlng.lat, event.latlng.lng]).addTo(map);
-    markArr.push(marker);
-    console.log(markArr);
-  });
-
-  var popup = L.popup();
-
-  function onMapClick(e) {
-    popup
-      .setLatLng(e.latlng)
-      .setContent("You saved this location", e.latlng)
-      .openOn(map);
-  }
-
-  map.on("click", onMapClick);
+  createPins();
 });
+
+const createPins = () => {};
+const renderPins = () => {
+  renderPins();
+};
+const $pinForm = `
+  <form class="pinForm">
+  <input type="hidden" name="owner_id" value="${user_id}" />
+  <label for="title">Pin Name:</label><br><br>
+  <input type="text" name="title" id="name" placeholder="New Pin" /><br><br>
+  <label for="description">Description:</label><br><br>
+  <textarea type="text" name="description" placeholder="description" /><br><br>
+  <label for="img_url">Image URL:</label><br><br>
+  <input type="text" name="image_url" id="image" placeholder="image url" /><br><br>
+  <p class="submit_popup">Click the place on the map where you want to add a pin.</p>
+  <label for="latitude" class="pinlat" hidden></label><br>
+  <input type="text" class="pinlat" name="latitude" hidden />
+  <label for="longitude" class="pinlng" hidden></label><br>
+  <input type="text" class="pinlng" name="longitude" hidden/>
+  <input type="text" id="form-map-id" name="map_id" hidden />
+  <button class="submit_popup" type="submit" hidden>submit</button>
+  <button class="cancel" type="cancel">cancel</button>
+  </form>
+  `;
 
 // Function that generates a map
 const implementMap = () => {
