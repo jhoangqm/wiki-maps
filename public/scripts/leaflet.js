@@ -27,7 +27,7 @@ $(function () {
 const createPins = () => {
   let markArr = [];
   window.map.on("click", (event) => {
-    let marker = L.marker([event.latlng.lat, event.latlng.lng]);
+    let marker = new L.marker([event.latlng.lat, event.latlng.lng]);
     window.map.addLayer(marker);
     markArr.push(marker);
     marker.bindPopup(renderPins()).openPopup();
@@ -36,7 +36,9 @@ const createPins = () => {
     $(".pin-form").on("submit", function (e) {
       e.preventDefault();
 
-      let content = $(this).serialize();
+      let content =
+        $(this).serialize() +
+        `&lat=${event.latlng.lat}&long=${event.latlng.lng}`;
       console.log(content);
 
       return $.post(`/api/pins`, (data) => {
