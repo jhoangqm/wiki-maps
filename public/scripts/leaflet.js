@@ -1,22 +1,14 @@
+
+
 $(function () {
   // calling map function
   let map = implementMap();
 
   //sidebar maps
-  $('#calgary').on('click', function (event) {
-    map.flyTo([51.0486, -114.0708], 12)
-  });
-  $('#montreal').on('click', function (event) {
-    map.flyTo([45.5017, -73.5673], 12)
-  });
-  $('#toronto').on('click', function (event) {
-    map.flyTo([43.6501, -79.38], 12)
-  });
-  $('#ottawa').on('click', function (event) {
-    map.flyTo([45.4215, -75.6972], 12)
-  });
-  $('#vancouver').on('click', function (event) {
-    map.flyTo([49.2827, -123.1207], 12)
+  $('.cities').on('click', function (event) {
+    const lat = $(this).data("lat")
+    const long = $(this).data("long")
+    map.flyTo([lat, long], 12)
   });
 
   // generates pins on click
@@ -38,6 +30,8 @@ $(function () {
   }
 
   map.on("click", onMapClick);
+
+
 });
 
 // Function that generates a map
@@ -52,4 +46,7 @@ const implementMap = () => {
   }).addTo(map);
   return map;
 };
+
+
+
 

@@ -73,6 +73,7 @@ module.exports = (db) => {
 
   // GET users from DB
   router.get("/", (req, res) => {
+    console.log('anything');
     const user_id = req.params.user_id;
     const queryString = `
     SELECT *
