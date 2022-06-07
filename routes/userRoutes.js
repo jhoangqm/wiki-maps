@@ -5,6 +5,7 @@
  * See: https://expressjs.com/en/guide/using-middleware.html#middleware.router
  */
 
+const bcrypt = require("bcryptjs");
 const express = require("express");
 const router = express.Router();
 
@@ -12,6 +13,47 @@ const router = express.Router();
 // All SQL has been tested via psql and they work,
 // routes might not work because they haven't been tested
 module.exports = (db) => {
+  // GET login info
+  router.get("/login", (req, res) => {
+    const user_id = req.session.user_id;
+    if (user_id === undefined || !user_id) {
+      return res.send({ message: "Please login" });
+    }
+    res.redirect("/");
+  });
+
+  // POST login method
+  router.post("/login", (req, res) => {
+    const { username, password } = req.body;
+    console.log(req.body);
+    const queryString = `SELECT * FROM users WHERE username = $1;`;
+    db.query(queryString, [username])
+      .then((data) => {
+        const user = data.rows[0];
+        console.log(data.rows[0]);
+
+        if (!user) {
+          return res
+            .status(400)
+            .send({ message: "Username not found in database" });
+        }
+
+        const validPassword = bcrypt.compareSync(password, user.password);
+
+        if (!validPassword) {
+          return res
+            .status(400)
+            .send({ message: "Password does not match username" });
+        }
+        console.log(req.session.user_id);
+        req.session.user_id = user.id;
+        res.redirect("/");
+      })
+      .catch((err) => {
+        res.status(500).json({ error: err.message });
+      });
+  });
+
   // GET the current user
   router.get("/me", (req, res) => {
     const user_id = req.session.user_id;
@@ -22,7 +64,7 @@ module.exports = (db) => {
     db.query(queryString, [user_id])
       .then((data) => {
         const currUser = data.rows[0];
-        res.json(currUser);
+        res.json({ currUser });
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
@@ -38,7 +80,45 @@ module.exports = (db) => {
     db.query(queryString, [user_id])
       .then((data) => {
         const users = data.rows;
-        res.json(users, user_id);
+        res.json({ users, user_id });
+      })
+      .catch((err) => {
+        res.status(500).json({ error: err.message });
+      });
+  });
+
+  // Register user to DB
+  router.post("/register", (req, res) => {
+    const { username, password } = req.body;
+    console.log(req.body);
+    if (!username.length || !password.length) {
+      return res.status(400).send({ error: "Please try again" });
+    }
+
+    db.query(`SELECT * from users WHERE username = $1;`, [username])
+      .then((data) => {
+        const user = data.rows[0];
+        console.log(data.rows[0]);
+        // Check if username exists in the DB and return error message
+        if (user) {
+          return res.status(403).send({ error: "Username already exists" });
+        }
+        // Otherwise create username and hash the password
+        const hashedPassword = bcrypt.hashSync(password, 10);
+        db.query(
+          `INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *;`,
+          [username, hashedPassword]
+        )
+          .then((result) => {
+            const user = result.rows[0];
+            console.log(result.rows[0]);
+            req.session.user_id = user.id;
+            console.log(user.id);
+            return res.redirect("/");
+          })
+          .catch((err) => {
+            res.status(500).json({ error: err.message });
+          });
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
@@ -71,24 +151,29 @@ module.exports = (db) => {
       });
   });
 
-  //PATCH edit user location
-  router.patch("/:id", (req, res) => {
-    const user_id = req.params.id;
-    const { latitude, longitude } = req.body;
-    const queryString = `
-    UPDATE maps SET name = $1, area = $2
-    WHERE owner_id = $3
-    AND maps_id = $4
-    RETURNING *;`;
-    db.query(queryString, [latitude, longitude, user_id])
-      .then((data) => {
-        const maps = data.rows;
-        res.json(maps);
-      })
-      .catch((err) => {
-        res.status(500).json({ error: err.message });
-      });
+  router.post("/logout", (req, res) => {
+    req.session = null;
+    res.send({ message: "Logged out!" });
   });
+
+  // //PATCH edit user location ( this is a stretch for now )
+  // router.patch("/:id", (req, res) => {
+  //   const user_id = req.params.id;
+  //   const { latitude, longitude } = req.body;
+  //   const queryString = `
+  //   UPDATE maps SET name = $1, area = $2
+  //   WHERE owner_id = $3
+  //   AND maps_id = $4
+  //   RETURNING *;`;
+  //   db.query(queryString, [latitude, longitude, user_id])
+  //     .then((data) => {
+  //       const maps = data.rows;
+  //       res.json(maps);
+  //     })
+  //     .catch((err) => {
+  //       res.status(500).json({ error: err.message });
+  //     });
+  // });
 
   return router;
 };
