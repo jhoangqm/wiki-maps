@@ -59,7 +59,7 @@ const favMapsRoutes = require("./routes/favMapsRoutes");
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own
 
-app.use("/api/user", usersRoutes(db));
+app.use("/api/users", usersRoutes(db));
 app.use("/api/maps", mapsRoutes(db));
 app.use("/api/pins", pinsRoutes(db));
 app.use("/api/mapPins", mapPinsRoutes(db));

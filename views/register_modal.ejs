@@ -4,18 +4,15 @@
      <div>
        <div class="close-register">&times;</div>
        <h2 id="register-header">Register</h2>
-       <form class="register-form" action="#">
-         <div class="info">
-           <label for="username">Username</label>
-         <input type="username" placeholder="Userame">
-       </div>
-       <div class="info">
-         <label for="email">Email</label>
-         <input type="email" placeholder="email">
-       </div>
-       <div class="info">
-         <label for="password">Password</label>
-         <input type="password" placeholder="password">
+       <form class="register-form" action="/api/users/register" method="POST">
+        <div class="info">
+          <label for="username">Username</label>
+          <input name ="username" type="username" placeholder="username">
+          </div>
+          <div class="info">
+          <label for="password">Password</label>
+          <input name="password" type="password" placeholder="password">
+          </div>
        </div>
          <div class="info">
          <input class="submit" type="submit" value="Sign Up">

@@ -6,14 +6,14 @@
         <div>
             <div class="close-login">&times;</div>
             <h1 id="login-header">Login</h1>
-            <form class="login-form" action="#">
+            <form class="login-form" action="/api/users/login" method="POST">
             <div class="info">
-            <label for="email">Email</label>
-            <input type="email" placeholder="email">
+            <label for="username">Username</label>
+            <input name ="username" type="username" placeholder="username">
             </div>
             <div class="info">
             <label for="password">Password</label>
-            <input type="password" placeholder="password">
+            <input name="password" type="password" placeholder="password">
             </div>
             <div class="info">
             <input class="submit" type="submit" value="Log In">
@@ -21,6 +21,6 @@
             </form>
         </div>
         </div>
-    </div> 
-   
+    </div>
+
 
