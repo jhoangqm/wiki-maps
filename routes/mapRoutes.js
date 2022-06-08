@@ -15,11 +15,7 @@ const router = express.Router();
 module.exports = (db) => {
   // GET all maps from DB
   router.get("/", (req, res) => {
-<<<<<<< HEAD
     const user_id = req.session.user_id;
-=======
-    const user_id = req.query.user_id;
->>>>>>> b0dac57c8f6fb173114fac5d769be8df66d3f640
     const queryString = `SELECT * FROM maps WHERE owner_id = $1;`;
 
     db.query(queryString, [user_id])

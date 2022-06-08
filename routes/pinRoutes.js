@@ -58,11 +58,7 @@ module.exports = (db) => {
     ])
       .then((data) => {
         const pins = data.rows[0];
-<<<<<<< HEAD
-        // console.log(`/api/pins/:`, data);
-=======
         console.log(`/api/pins/:`, data);
->>>>>>> b0dac57c8f6fb173114fac5d769be8df66d3f640
         console.log(`/api/pins/:`, pins);
         res.json(pins);
       })
