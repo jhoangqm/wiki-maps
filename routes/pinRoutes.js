@@ -39,8 +39,15 @@ module.exports = (db) => {
   });
   // POST add pin
   router.post("/", (req, res) => {
-    const { owner_id, title, description, latitude, longitude, image_url } =
-      req.body;
+    const {
+      owner_id,
+      title,
+      description,
+      latitude,
+      longitude,
+      image_url,
+      map_id,
+    } = req.body;
     console.log(req.body);
     const queryString = `
     INSERT INTO pins (
@@ -55,12 +62,13 @@ module.exports = (db) => {
       image_url,
       latitude,
       longitude,
+      map_id,
     ])
       .then((data) => {
         const pins = data.rows[0];
         console.log(`/api/pins/:`, data);
         console.log(`/api/pins/:`, pins);
-        res.json(pins);
+        res.json({ pins, map_id });
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
