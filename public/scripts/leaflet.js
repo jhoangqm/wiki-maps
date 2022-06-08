@@ -1,32 +1,36 @@
 $(function () {
   // calling map function
   window.map = implementMap();
+  window.markers = [];
   getPins();
   createPins();
-  getUserFavs(1);
+  getUserFavs();
 });
 
 // Incomplete get pins function
 const getPins = () => {
-  return $.ajax({
+  return $.get({
     url: `/api/pins`,
     success: function (result) {
       result.forEach(function (data) {
+        console.log(data);
         const lat = data.lat;
         const lng = data.lng;
         const marker = L.marker([lat, lng]).addTo(map);
+        marker.bindPopUp(data);
+        window.markers.push(marker);
+        window.map.addLayer(marker);
       });
     },
   });
 };
 
 const getUserFavs = (user_id) => {
-  return $.ajax({
+  return $.get({
     url: `/api/maps`,
     data: {
       user_id,
     },
-    method: "GET",
     success: function (result) {
       let favs = "<ul>";
 
@@ -62,8 +66,8 @@ const createPins = () => {
     window.map.addLayer(marker);
     markArr.push(marker);
     marker.bindPopup(renderPins()).openPopup();
-    $("label.pinlat").show().text(`latitude: ${event.latlng.lat}`);
-    $("label.pinlng").show().text(`longitude: ${event.latlng.lng}`);
+    // $("label.pinlat").show().text(`latitude: ${event.latlng.lat}`);
+    // $("label.pinlng").show().text(`longitude: ${event.latlng.lng}`);
     $("input.pinlat").val(event.latlng.lat);
     $("input.pinlng").val(event.latlng.lng);
 

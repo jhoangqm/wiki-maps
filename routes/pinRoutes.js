@@ -47,7 +47,7 @@ module.exports = (db) => {
       owner_id, title, description, image_url, latitude, longitude)
       VALUES
       ($1, $2, $3, $4, $5, $6)
-      RETURNING *;`;
+      RETURNING id;`;
     db.query(queryString, [
       owner_id,
       title,
@@ -58,7 +58,7 @@ module.exports = (db) => {
     ])
       .then((data) => {
         const pins = data.rows[0];
-        console.log(`/api/pins/:`, data);
+        // console.log(`/api/pins/:`, data);
         console.log(`/api/pins/:`, pins);
         res.json(pins);
       })
@@ -66,6 +66,7 @@ module.exports = (db) => {
         res.status(500).json({ error: err.message });
       });
   });
+
   // PATCH edit pin
   router.patch("/:id", (req, res) => {
     const user_ids = req.params.id;
