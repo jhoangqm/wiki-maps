@@ -6,14 +6,15 @@ const router = express.Router();
 // routes might not work because they haven't been tested
 module.exports = (db) => {
   // GET all pins from DB
-  router.get("/", (req, res) => {
+  router.get("/:id", (req, res) => {
+    const pin_id = req.params.id;
     const queryString = `
     SELECT *
     FROM pins;`;
-    db.query(queryString)
+    db.query(queryString, [pin_id])
       .then((data) => {
         const pins = data.rows;
-        res.json(pins);
+        res.json({ pins });
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
@@ -38,32 +39,27 @@ module.exports = (db) => {
   });
   // POST add pin
   router.post("/", (req, res) => {
-    const {
-      owner_id,
-      title,
-      description,
-      latitude,
-      longitude,
-      image_url,
-      map_id,
-    } = req.body;
+    const { owner_id, title, description, latitude, longitude, image_url } =
+      req.body;
+    console.log(req.body);
     const queryString = `
     INSERT INTO pins (
-      owner_id, title, descripion, latitude, longitude, image_url, map_id)
+      owner_id, title, description, image_url, latitude, longitude)
       VALUES
       ($1, $2, $3, $4, $5, $6)
-      RETURNING id;`;
+      RETURNING *;`;
     db.query(queryString, [
       owner_id,
       title,
       description,
+      image_url,
       latitude,
       longitude,
-      image_url,
-      map_id,
     ])
       .then((data) => {
-        const pins = data.rows;
+        const pins = data.rows[0];
+        console.log(`/api/pins/:`, data);
+        console.log(`/api/pins/:`, pins);
         res.json(pins);
       })
       .catch((err) => {

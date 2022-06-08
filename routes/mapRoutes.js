@@ -15,7 +15,7 @@ const router = express.Router();
 module.exports = (db) => {
   // GET all maps from DB
   router.get("/", (req, res) => {
-    const user_id = req.params.user_id;
+    const user_id = req.session.user_id;
     const queryString = `SELECT * FROM maps;`;
     db.query(queryString, [user_id])
       .then((data) => {
@@ -27,7 +27,7 @@ module.exports = (db) => {
       });
   });
 
-  //GET all maps from specific id
+  //GET map from specific id
   router.get("/:id", (req, res) => {
     const user_id = req.params.id;
     const queryString = `SELECT * FROM maps WHERE maps.id = $1;`;
@@ -35,23 +35,6 @@ module.exports = (db) => {
       .then((data) => {
         const maps = data.rows;
         res.json(maps);
-      })
-      .catch((err) => {
-        res.status(500).json({ error: err.message });
-      });
-  });
-
-  //GET fav maps
-  router.get("/:id/fav_maps", (req, res) => {
-    const user_id = req.params.id;
-    const queryString = `SELECT * FROM favourited_maps
-    JOIN maps ON maps.id = map_id
-    JOIN users ON users.id = users.id
-    WHERE user_id = $1;`;
-    db.query(queryString, [user_id])
-      .then((data) => {
-        const favorites = data.rows;
-        res.json(favorites);
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
@@ -75,24 +58,41 @@ module.exports = (db) => {
       });
   });
 
-  //PATCH edit map
-  router.patch("/:id", (req, res) => {
-    const user_id = req.params.id;
-    const { name, area, owner_id } = req.body;
-    const queryString = `
-    UPDATE maps SET name = $1, area = $2
-    WHERE owner_id = $3
-    AND maps_id = $4
-    RETURNING *;`;
-    db.query(queryString, [name, area, owner_id, user_id])
-      .then((data) => {
-        const maps = data.rows;
-        res.json(maps);
-      })
-      .catch((err) => {
-        res.status(500).json({ error: err.message });
-      });
-  });
+  // //GET fav maps
+  // router.get("/:id/fav_maps", (req, res) => {
+  //   const user_id = req.params.id;
+  //   const queryString = `SELECT * FROM fav_maps
+  //   JOIN maps ON maps.id = map_id
+  //   JOIN users ON users.id = users.id
+  //   WHERE user_id = $1;`;
+  //   db.query(queryString, [user_id])
+  //     .then((data) => {
+  //       const favorites = data.rows;
+  //       res.json(favorites);
+  //     })
+  //     .catch((err) => {
+  //       res.status(500).json({ error: err.message });
+  //     });
+  // });
+
+  // //PATCH edit map
+  // router.patch("/:id", (req, res) => {
+  //   const user_id = req.params.id;
+  //   const { name, area, owner_id } = req.body;
+  //   const queryString = `
+  //   UPDATE maps SET name = $1, area = $2
+  //   WHERE owner_id = $3
+  //   AND maps_id = $4
+  //   RETURNING *;`;
+  //   db.query(queryString, [name, area, owner_id, user_id])
+  //     .then((data) => {
+  //       const maps = data.rows;
+  //       res.json(maps);
+  //     })
+  //     .catch((err) => {
+  //       res.status(500).json({ error: err.message });
+  //     });
+  // });
 
   //POST delete map
   router.delete("/:id", (req, res) => {
