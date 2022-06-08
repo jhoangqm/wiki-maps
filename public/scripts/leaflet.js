@@ -1,9 +1,24 @@
 $(function () {
   // calling map function
   window.map = implementMap();
+  getPins();
   createPins();
   getUserFavs(1);
 });
+
+// Incomplete get pins function
+const getPins = () => {
+  return $.ajax({
+    url: `/api/pins`,
+    success: function (result) {
+      result.forEach(function (data) {
+        const lat = data.lat;
+        const lng = data.lng;
+        const marker = L.marker([lat, lng]).addTo(map);
+      });
+    },
+  });
+};
 
 const getUserFavs = (user_id) => {
   return $.ajax({
@@ -52,9 +67,9 @@ const createPins = () => {
     $("input.pinlat").val(event.latlng.lat);
     $("input.pinlng").val(event.latlng.lng);
 
-    marker.getPopup().on("remove", function () {
-      window.map.removeLayer(marker);
-    });
+    // marker.getPopup().on("remove", function () {
+    //   window.map.removeLayer(marker);
+    // });
 
     $(".pin-form").on("submit", function (e) {
       e.preventDefault();
