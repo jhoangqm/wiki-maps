@@ -31,6 +31,10 @@ const createPins = () => {
     window.map.addLayer(marker);
     markArr.push(marker);
     marker.bindPopup(renderPins()).openPopup();
+    $("label.pinlat").show().text(`latitude: ${event.latlng.lat}`);
+    $("label.pinlng").show().text(`longitude: ${event.latlng.lng}`);
+    $("input.pinlat").val(event.latlng.lat);
+    $("input.pinlng").val(event.latlng.lng);
 
     marker.getPopup().on("remove", function () {
       window.map.removeLayer(marker);
@@ -39,16 +43,14 @@ const createPins = () => {
     $(".pin-form").on("submit", function (e) {
       e.preventDefault();
 
-      let content =
-        $(this).serialize() +
-        `&latitude=${event.latlng.lat}&longitude=${event.latlng.lng}`;
+      let content = $(this).serialize();
       console.log(content);
 
-      return $.post(`/api/pins`, content, (data) => {
+      return $.post(`/api/pins/`, content, (data) => {
         console.log(data);
         window.markers.push(marker);
-        // marker.closePopup();
-        // marker.unbindPopup();
+        marker.closePopup();
+        marker.unbindPopup();
         marker.bindPopup(data.content);
         console.log(data.content);
       });
@@ -76,6 +78,10 @@ const renderPins = () => {
     <input type="text" name="title" id="name" placeholder="New Pin"/><br>
     <input type="textarea" name="description" placeholder="description"/><br>
     <input type="text" name="image_url" id="image" placeholder="image url" /><br>
+    <label for="latitude" class="pinlat" hidden></label><br>
+    <input type="text" class="pinlat" name="latitude" hidden />
+    <label for="longitude" class="pinlng" hidden></label><br>
+    <input type="text" class="pinlng" name="longitude" hidden/>
     <button class="submit" type="submit">submit</button>
   </form>
 </div>
