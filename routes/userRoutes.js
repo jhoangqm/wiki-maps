@@ -30,7 +30,7 @@ module.exports = (db) => {
     db.query(queryString, [username])
       .then((data) => {
         const user = data.rows[0];
-        console.log(data.rows[0]);
+        console.log('userdata:',data.rows[0]);
 
         if (!user) {
           return res
@@ -45,8 +45,9 @@ module.exports = (db) => {
             .status(400)
             .send({ message: "Password does not match username" });
         }
-        console.log(req.session.user_id);
+
         req.session.user_id = user.id;
+        console.log('user_id:',req.session.user_id);
         res.redirect("/");
       })
       .catch((err) => {
@@ -73,6 +74,7 @@ module.exports = (db) => {
 
   // GET users from DB
   router.get("/", (req, res) => {
+    console.log('anything');
     const user_id = req.params.user_id;
     const queryString = `
     SELECT *

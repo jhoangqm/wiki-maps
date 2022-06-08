@@ -15,8 +15,9 @@ const router = express.Router();
 module.exports = (db) => {
   // GET all maps from DB
   router.get("/", (req, res) => {
-    const user_id = req.session.user_id;
-    const queryString = `SELECT * FROM maps;`;
+    const user_id = req.query.user_id;
+    const queryString = `SELECT * FROM maps WHERE owner_id = $1;`;
+
     db.query(queryString, [user_id])
       .then((data) => {
         const maps = data.rows;
@@ -31,6 +32,7 @@ module.exports = (db) => {
   router.get("/:id", (req, res) => {
     const user_id = req.params.id;
     const queryString = `SELECT * FROM maps WHERE maps.id = $1;`;
+
     db.query(queryString, [user_id])
       .then((data) => {
         const maps = data.rows;
