@@ -1,29 +1,45 @@
 $(function () {
   // calling map function
   window.map = implementMap();
-
-  //sidebar maps
-  $("#calgary").on("click", function (event) {
-    map.flyTo([51.0486, -114.0708], 12);
-  });
-  $("#montreal").on("click", function (event) {
-    map.flyTo([45.5017, -73.5673], 12);
-  });
-  $("#toronto").on("click", function (event) {
-    map.flyTo([43.6501, -79.38], 12);
-  });
-  $("#ottawa").on("click", function (event) {
-    map.flyTo([45.4215, -75.6972], 12);
-  });
-  $("#vancouver").on("click", function (event) {
-    map.flyTo([49.2827, -123.1207], 12);
-  });
-
   createPins();
+  getUserFavs(1);
 });
 
-// generates pins on click
+const getUserFavs = (user_id) => {
+  return $.ajax({
+    url: `/api/maps`,
+    data: {
+      user_id,
+    },
+    method: "GET",
+    success: function (result) {
+      let favs = "<ul>";
 
+      result.forEach((element) => {
+        favs += `
+          <li>
+            <button class="cities" data-lat="${element.latitude}" data-long="${element.longitude}">
+              ${element.name}
+            </button>
+          </li>
+        `;
+      });
+
+      favs += "</ul>";
+
+      $(".side-nav-body").append(favs);
+
+      //sidebar maps
+      $(".cities").on("click", function (event) {
+        const lat = $(this).data("lat");
+        const long = $(this).data("long");
+        map.flyTo([lat, long], 12);
+      });
+    },
+  });
+};
+
+// generates pins on click
 const createPins = () => {
   let markArr = [];
   window.map.on("click", (event) => {
