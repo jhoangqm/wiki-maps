@@ -47,29 +47,44 @@ module.exports = (db) => {
       image_url,
       map_id,
     } = req.body;
-    const queryString = `
-    INSERT INTO pins (
-      owner_id, title, descripion, latitude, longitude, image_url, map_id)
-      VALUES
-      ($1, $2, $3, $4, $5, $6)
-      RETURNING id;`;
-    db.query(queryString, [
+    const queryStringPins = `
+      INSERT INTO pins (owner_id, title, description, latitude, longitude, image_url)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING id;
+    `;
+    db.query(queryStringPins, [
       owner_id,
       title,
       description,
       latitude,
       longitude,
       image_url,
-      map_id,
     ])
       .then((data) => {
         const pins = data.rows;
-        res.json(pins);
+
+        console.log(data);
+
+        const queryStringMapsPins = `
+          INSERT INTO maps_pins (map_id, pin_id)
+          VALUES ($1, $2)
+          RETURNING id;
+        `;
+
+        return db.query(queryStringMapsPins, [
+          map_id,
+          pins[0].id,
+        ])
+          .then((data) => {
+            res.json(pins);
+          })
+
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
       });
   });
+
   // PATCH edit pin
   router.patch("/:id", (req, res) => {
     const user_ids = req.params.id;

@@ -30,7 +30,7 @@ app.use(express.json());
 app.use(
   cookieSession({
     name: "session",
-    keys: [process.env.COOKIE_1, process.env.COOKIE_2],
+    keys: ['key1', 'key2'],
 
     // Cookie Options
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
@@ -67,45 +67,8 @@ app.use("/api/favMaps", favMapsRoutes(db));
 
 // Note: mount other resources here, using the same pattern above
 
-// Home page
-// Warning: avoid creating more routes in this file!
-// Separate them into separate routes files (see above).
-const getUserMaps = function() {
-  const queryString = `
-SELECT *
-FROM maps;`
-  return db.query(queryString,)
-    .then(res => {
-      if(res.rows) {
-        return res.rows;
-      } else {
-        return null;
-      }
-    })
-    .catch (err => {
-      console.log('query error:', err)
-    });
-};
-
-
 app.get("/", (req, res) => {
-  getUserMaps()
-.then(result=> {
-  console.log(result);
-  const templatevars = {result}
-  res.render("index", templatevars);
-});
-});
-
-// app.get("/login/:id", (req, res) => {
-//   req.session.user_id = req.params.id;
-//   res.redirect("/");
-// });
-
-app.post("/logout", (req, res) => {
-  req.session = null;
-  res.redirect("/");
-  console.log("Logged out!");
+  res.render("index");
 });
 
 app.listen(PORT, () => {

@@ -13,65 +13,56 @@
   <link rel="stylesheet" href="/styles/modals.css" type="text/css" />
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
-  integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
-  crossorigin=""/>
-   <!-- Make sure you put this AFTER Leaflet's CSS -->
- <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
- integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
- crossorigin=""></script>
-
-   <!-- Make sure you put this AFTER Leaflet's CSS -->
- <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
- integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
- crossorigin=""></script>
-
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
-  <script type="text/javascript" src="/scripts/leaflet.js"></script>
-  <script type="text/javascript" src="/scripts/modals.js"></script>
-  <script type="text/javascript" src="/scripts/app.js"></script>
+    integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+    crossorigin="" />
 
 </head>
 
 <%- include("partials/_header") %>
-<body>
-  <div class="body-content">
-    <div class="map-content">
-  <div id="map">
-  <script type="text/javascript" src="/scripts/leaflet.js"></script>
-  </div>
-  <div class="map-description-box">
-    <small>Created By: User</small>
-    <small>Created On: 00-00-0000</small>
-    <label for="description">Description: this describes the contents of the map</label>
-  </div>
-</div>
-  <!-- Nav Bar --->
-  <div class="side-nav">
-    <div class="side-nav-header">All Maps</div>
-      <ul>
-        <%result.forEach(element => { %>
-          <li><a class="cities" data-lat="<%=element.latitude%>" data-long="<%=element.longitude%>" href="#"><%=element.name%></a></li>
 
-          <% }) %>
-      </ul>
+  <body>
+    <div class="body-content">
+      <div class="map-content">
+        <div id="map">
+        </div>
+        <div class="map-description-box">
+          <small>Created By: User</small>
+          <small>Created On: 00-00-0000</small>
+          <label for="description">Description: this describes the contents of the map</label>
+        </div>
+      </div>
+      <!-- Nav Bar --->
+      <div class="side-nav">
+        <div class="side-nav-header">All Maps</div>
+        <div class="side-nav-body"></div>
       </div>
     </div>
-</div>
-</div>
 
-<!-- Login modal -->
-<div>
-  <%- include("login_modal") %>
-</div>
+    <!-- Login modal -->
+    <div>
+      <%- include("login_modal") %>
+    </div>
 
-<!-- Register modal  -->
-<div>
-<%- include("register_modal") %>
-</div>
-<script type="text/javascript" src="/scripts/modal.js"></script>
-</body>
+    <!-- Register modal  -->
+    <div>
+      <%- include("register_modal") %>
+    </div>
 
 
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+      integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+      crossorigin=""></script>
+
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+      integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+      crossorigin=""></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+    <script type="text/javascript" src="/scripts/leaflet.js"></script>
+    <script type="text/javascript" src="/scripts/modals.js"></script>
+    <script type="text/javascript" src="/scripts/app.js"></script>
+  </body>
 </html>
-
