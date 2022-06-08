@@ -46,7 +46,7 @@ const createPins = () => {
       let content = $(this).serialize();
       console.log(content);
 
-      return $.post(`/api/pins/`, content, (data) => {
+      return $.post(`/api/pins`, content, (data) => {
         console.log(data);
         window.markers.push(marker);
         marker.closePopup();
