@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 $(function () {
   // calling map function
   window.map = implementMap();
@@ -136,3 +137,5 @@ const implementMap = () => {
   }).addTo(map);
   return map;
 };
+=======
+>>>>>>> b0dac57c8f6fb173114fac5d769be8df66d3f640

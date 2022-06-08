@@ -1,5 +1,26 @@
-
-.body-content{
-  display: flex;
+body,
+html {
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
 }
 
+.wikimap-header {
+  height: 60px;
+}
+.wikimap-header #wikimap-header-logout {
+  display: none;
+}
+
+.wikimap-content {
+  height: 100%;
+  padding-left: 0;
+  padding-top: 60px;
+}
+
+#wikimap-sidebar {
+  margin-top: 60px;
+  padding: 0;
+  width: 0;
+  visibility: hidden;
+}

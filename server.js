@@ -30,7 +30,7 @@ app.use(express.json());
 app.use(
   cookieSession({
     name: "session",
-    keys: [process.env.COOKIE_1, process.env.COOKIE_2],
+    keys: ['key1', 'key2'],
 
     // Cookie Options
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
@@ -67,23 +67,8 @@ app.use("/api/favMaps", favMapsRoutes(db));
 
 // Note: mount other resources here, using the same pattern above
 
-// Home page
-// Warning: avoid creating more routes in this file!
-// Separate them into separate routes files (see above).
-
 app.get("/", (req, res) => {
   res.render("index");
-});
-
-app.get("/login/:id", (req, res) => {
-  req.session.user_id = req.params.id;
-  res.redirect("/");
-});
-
-app.post("/logout", (req, res) => {
-  req.session = null;
-  res.redirect("/");
-  console.log("Logged out!");
 });
 
 app.listen(PORT, () => {
