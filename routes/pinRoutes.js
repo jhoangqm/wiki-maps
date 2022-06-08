@@ -6,14 +6,15 @@ const router = express.Router();
 // routes might not work because they haven't been tested
 module.exports = (db) => {
   // GET all pins from DB
-  router.get("/", (req, res) => {
+  router.get("/:id", (req, res) => {
+    const pin_id = req.params.id;
     const queryString = `
     SELECT *
     FROM pins;`;
-    db.query(queryString)
+    db.query(queryString, [pin_id])
       .then((data) => {
         const pins = data.rows;
-        res.json(pins);
+        res.json({ pins });
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
@@ -38,53 +39,33 @@ module.exports = (db) => {
   });
   // POST add pin
   router.post("/", (req, res) => {
-    const {
+    const { owner_id, title, description, latitude, longitude, image_url } =
+      req.body;
+    console.log(req.body);
+    const queryString = `
+    INSERT INTO pins (
+      owner_id, title, description, image_url, latitude, longitude)
+      VALUES
+      ($1, $2, $3, $4, $5, $6)
+      RETURNING *;`;
+    db.query(queryString, [
       owner_id,
       title,
       description,
+      image_url,
       latitude,
       longitude,
-      image_url,
-      map_id,
-    } = req.body;
-    const queryStringPins = `
-      INSERT INTO pins (owner_id, title, description, latitude, longitude, image_url)
-      VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING id;
-    `;
-    db.query(queryStringPins, [
-      owner_id,
-      title,
-      description,
-      latitude,
-      longitude,
-      image_url,
     ])
       .then((data) => {
-        const pins = data.rows;
-
-        console.log(data);
-
-        const queryStringMapsPins = `
-          INSERT INTO maps_pins (map_id, pin_id)
-          VALUES ($1, $2)
-          RETURNING id;
-        `;
-
-        return db.query(queryStringMapsPins, [
-          map_id,
-          pins[0].id,
-        ])
-          .then((data) => {
-            res.json(pins);
-          })
-
+        const pins = data.rows[0];
+        console.log(`/api/pins/:`, data);
+        console.log(`/api/pins/:`, pins);
+        res.json(pins);
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
       });
   });
-
   // PATCH edit pin
   router.patch("/:id", (req, res) => {
     const user_ids = req.params.id;

@@ -1,32 +1,19 @@
-<header>
-  <nav class="navbar navbar-expand-md navbar-dark bg-success">
-    <a class="navbar-brand" href="/urls">Map This!</a>
-    <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button> -->
+<header class="fixed-top bg-dark px-4 py-2 text-white wikimap-header">
+  <div class="d-flex align-items-center justify-content-between">
+    <a href="/urls" class="text-decoration-none text-white">My Map</a>
 
-
-
-    <!-- <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav"> -->
-        <!-- <a class="nav-item nav-link" href="/urls">My URLs</a>
-        <a class="nav-item nav-link" href="/urls/new">Create New URL</a> -->
-      <!-- </div>
-    </div> -->
-    <!-- Logout form -->
-    <form method="POST" action="/logout">
-    <div class="form-group">
-      <label>Welcome torontofam</label>
-      <button type="submit" class="btn btn-outline-dark">Logout</button>
+    <div class="d-flex align-items-center">
+      <span id="wikimap-header-logout">
+        <label class="mx-1">
+          Welcome
+          <span id="wikimap-header-login-user"></span>
+        </label>
+        <button id="logoutBtn" type="button" class="btn btn-dark mx-1">Logout</button>
+      </span>
+      <span id="wikimap-header-login">
+        <button type="button" class="btn btn-dark mx-1" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+        <button id="registerBtn" type="button" class="btn btn-dark m-1">Register</button>
+      </span>
     </div>
-    </form>
-
-
-
-        <button class="btn btn-dark" id="login-btn" href="/login" style="margin: 1em">Login</button>
-
-
-        <button class="btn btn-dark" id="register-btn" href="/register" style="margin: 1em">Register</button>
-
-  </nav>
+  </div>
 </header>

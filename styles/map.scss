@@ -1,10 +1,5 @@
-#map {
-  display: flex;
-  flex-direction: column-reverse;
-  height: 85vh;
-  width: 85vw;
-  padding-right: 0vw;
-  z-index: 1;
+.wikimap-map {
+  height: 100%;
 }
 
 .map-description-box{

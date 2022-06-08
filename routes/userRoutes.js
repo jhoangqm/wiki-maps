@@ -24,13 +24,13 @@ module.exports = (db) => {
 
   // POST login method
   router.post("/login", (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     console.log(req.body);
     const queryString = `SELECT * FROM users WHERE username = $1;`;
-    db.query(queryString, [username])
+    db.query(queryString, [email])
       .then((data) => {
         const user = data.rows[0];
-        console.log('userdata:',data.rows[0]);
+        console.log(data.rows[0]);
 
         if (!user) {
           return res
@@ -47,8 +47,7 @@ module.exports = (db) => {
         }
 
         req.session.user_id = user.id;
-        console.log('user_id:',req.session.user_id);
-        res.redirect("/");
+        return res.status(200).send({ ...user });
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
@@ -62,19 +61,24 @@ module.exports = (db) => {
     SELECT *
     FROM users
     WHERE id = $1;`;
+
     db.query(queryString, [user_id])
       .then((data) => {
-        const currUser = data.rows[0];
-        res.json({ currUser });
+        const user = data.rows[0];
+
+        if (!user) {
+          return res
+            .status(400)
+            .send({ message: "Username not found in database" });
+        }
+
+        return res.json({ ...user });
       })
-      .catch((err) => {
-        res.status(500).json({ error: err.message });
-      });
+      .catch((err) => res.status(500).json({ error: err.message }));
   });
 
   // GET users from DB
   router.get("/", (req, res) => {
-    console.log('anything');
     const user_id = req.params.user_id;
     const queryString = `
     SELECT *
