@@ -38,15 +38,16 @@ const createPins = () => {
 
       let content =
         $(this).serialize() +
-        `&lat=${event.latlng.lat}&long=${event.latlng.lng}`;
+        `&latitude=${event.latlng.lat}&longitude=${event.latlng.lng}`;
       console.log(content);
 
-      return $.post(`/api/pins`, (data) => {
+      return $.post(`/api/pins`, content, (data) => {
         console.log(data);
         window.markers.push(marker);
-        marker.closePopup();
-        marker.unbindPopup();
+        // marker.closePopup();
+        // marker.unbindPopup();
         marker.bindPopup(data.content);
+        console.log(data.content);
       });
     });
   });
@@ -69,14 +70,9 @@ const renderPins = () => {
   <div class="pin-form-container">
   <form class="pin-form">
     <label for="title"> Pin Name:</label><br>
-    <input type="title" name="title" id="name" placeholder="New Pin"/><br>
+    <input type="text" name="title" id="name" placeholder="New Pin"/><br>
     <input type="textarea" name="description" placeholder="description"/><br>
-    <input type="image_url" name="image_url" id="image" placeholder="image url" /><br>
-    <label for="latitude" class="pinlat" hidden></label><br>
-    <input type="text" class="pinlat" name="latitude" hidden/>
-    <label for="longitude" class="pinlng" hidden></label><br>
-    <input type="text" class="pinlng" name="longitude" hidden/>
-    <input type="text" id="form-map-id" name="map_id" hidden/>
+    <input type="text" name="image_url" id="image" placeholder="image url" /><br>
     <button class="submit" type="submit">submit</button>
   </form>
 </div>
