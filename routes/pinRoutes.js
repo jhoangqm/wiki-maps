@@ -44,7 +44,7 @@ module.exports = (db) => {
     console.log(req.body);
     const queryString = `
     INSERT INTO pins (
-      owner_id, title, descripion, image_url, latitude, longitude)
+      owner_id, title, description, image_url, latitude, longitude)
       VALUES
       ($1, $2, $3, $4, $5, $6)
       RETURNING *;`;

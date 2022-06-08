@@ -31,7 +31,10 @@ const createPins = () => {
     window.map.addLayer(marker);
     markArr.push(marker);
     marker.bindPopup(renderPins()).openPopup();
-    console.log(markArr);
+
+    marker.getPopup().on("remove", function () {
+      window.map.removeLayer(marker);
+    });
 
     $(".pin-form").on("submit", function (e) {
       e.preventDefault();
