@@ -220,13 +220,13 @@ const pinInfo = (pin) => {
 
 // Incomplete get pins function
 const getPins = () => {
-  return $.ajax({
+  return $.get({
     url: `/api/pins`,
     success: function (result) {
       result.forEach(function (data) {
-        const lat = data.lat;
-        const lng = data.lng;
-        const marker = L.marker([lat, lng]).addTo(map);
+        const lat = data.latitude;
+        const lng = data.longitude;
+        L.marker([lat, lng]).addTo(map);
       });
     },
   });
@@ -236,6 +236,7 @@ $(function () {
   window.map = implementMap();
   window.markers = [];
   getUser();
+  getPins();
   setListeners();
   createPins();
 });
