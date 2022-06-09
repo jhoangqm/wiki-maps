@@ -19,6 +19,7 @@ const implementMap = (lat, lng) => {
 };
 
 const setListeners = () => {
+  // This is the login event
   $("#loginForm").on("submit", function (event) {
     event.preventDefault();
     const email = $(this).find("#loginEmail").val();
@@ -35,6 +36,7 @@ const setListeners = () => {
     });
   });
 
+  // This is the register event
   $("#registerForm").on("submit", function (event) {
     event.preventDefault();
     const email = $(this).find("#registerEmail").val();
@@ -51,6 +53,7 @@ const setListeners = () => {
     });
   });
 
+  // This is logout event
   $("#logoutBtn").on("click", function (event) {
     event.preventDefault();
 
@@ -70,6 +73,7 @@ const setListeners = () => {
     });
   });
 
+  // Creates a pin on click
   map.on("click", function (event) {
     const coordinates = {
       lat: event.latlng.lat,
@@ -108,6 +112,36 @@ const setListeners = () => {
         },
       });
     });
+
+    // this is the delete event NOT COMPLETED YET
+    map.eachLayer((mapLayer) => {
+      const pinID = $("pin-info").attr("data-pin");
+      $(".delete-pin-btn").on("click", function (e) {
+        e.preventDefault;
+
+        return $.ajax({
+          url: `/api/pins/${pinID}`,
+          type: "delete",
+          success: (result) => {
+            map.removeLayer(mapLayer);
+            renderPins(result);
+          },
+        });
+      });
+    });
+
+    // this is the edit event NOT COMPLETED YET
+    // $(".edit-pin-btn").on("click", function (e) {
+    //   e.preventDefault();
+
+    //   $.ajax({
+    //     url: `/api/pins/${pinID}`,
+    //     type: "get",
+    //     success: (result) => {
+    //       data.bindPopup(pinEdit(result.data));
+    //     },
+    //   });
+    // });
   });
 };
 
@@ -344,42 +378,6 @@ const pinEdit = (pin) => {
   return $pinForm;
 };
 
-// function that allows edit of a pin not completed
-const editPin = () => {
-  const pinID = $("pin-info").attr("data-pin");
-  $(".edit-pin-btn").on("click", function (e) {
-    e.preventDefault();
-
-    $.ajax({
-      url: `/api/pins/${pinID}`,
-      type: "get",
-      success: (result) => {
-        data.bindPopup(pinEdit(result.data));
-      },
-    });
-  });
-};
-
-// function that allows delete of a pin not completed
-const deletePin = () => {
-  map.eachLayer((mapLayer) => {
-    const pinID = $("pin-info").attr("data-pin");
-    $(".delete-pin-btn").on("click", function (e) {
-      e.preventDefault;
-
-      return $.ajax({
-        url: `/api/pins/${pinID}`,
-        type: "delete",
-        success: (result) => {
-          map.removeLayer(mapLayer);
-          renderPins(result);
-        },
-      });
-    });
-  });
-};
-
 $(function () {
   getUser();
-  deletePin();
 });
