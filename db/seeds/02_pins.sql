@@ -1,4 +1,4 @@
-INSERT INTO pins (owner_id, title, description, image_url, latitude, longitude)
+INSERT INTO pins (map_id, title, description, image_url, latitude, longitude)
 VALUES
 (
 1,
@@ -9,10 +9,10 @@ VALUES
 -79.3828881
 ),
 (
-2,
-'Olympic Stadium',
-'Where sports happens..',
-'https://media.coliseum-online.com/2019/06/Coliseum-Summit-news-Montreal-Olympic-Stadium.jpg',
-45.5596545,
--73.5497189
+1,
+'Casa Loma',
+'Gothic Revival castle style mansion and garden in midtown',
+'https://casaloma.ca/wp-content/uploads/2018/04/ABOUT.jpg',
+43.6780371,
+-79.4116326
 );
