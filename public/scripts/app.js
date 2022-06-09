@@ -73,6 +73,20 @@ const setListeners = () => {
     });
   });
 
+  // Creates map on form submission NOT COMPLETE
+  $("#newmapForm").on("submit", function (event) {
+    event.preventDefault();
+    const name = $(this).find("#name").val();
+    const latitude = $(this).find("#latitude").val();
+    const longitude = $(this).find("#longitude").val();
+    $.ajax({
+      url: `/api/maps/`,
+      data: { name, latitude, longitude },
+      method: "POST",
+      success: function (result) {},
+    });
+  });
+
   // Creates a pin on click
   map.on("click", function (event) {
     const coordinates = {
@@ -124,7 +138,7 @@ const setListeners = () => {
           type: "delete",
           success: (result) => {
             map.removeLayer(mapLayer);
-            renderPins(result);
+            getPins(result);
           },
         });
       });

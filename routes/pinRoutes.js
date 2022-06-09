@@ -96,13 +96,13 @@ module.exports = (db) => {
 
   // POST delete pin
   router.delete("/:id", (req, res) => {
-    const user_id = req.params.id;
+    const pin_id = req.params.id;
     const queryString = `
     DELETE FROM pins
     WHERE id = $1;`;
-    db.query(queryString, [user_id])
+    db.query(queryString, [pin_id])
       .then((data) => {
-        res.json(user_id);
+        res.send(200).json(pin_id);
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
