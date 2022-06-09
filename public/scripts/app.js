@@ -148,18 +148,18 @@ const setListeners = () => {
       });
     });
 
-    // this is the edit event NOT COMPLETED YET
-    // $(".edit-pin-btn").on("click", function (e) {
-    //   e.preventDefault();
+    const pinID = $("pin-info").attr("data-pin");
+    $(".edit-pin-btn").on("click", function (e) {
+      e.preventDefault();
 
-    //   $.ajax({
-    //     url: `/api/pins/${pinID}`,
-    //     type: "get",
-    //     success: (result) => {
-    //       data.bindPopup(pinEdit(result.data));
-    //     },
-    //   });
-    // });
+      $.ajax({
+        url: `/api/pins/${pinID}`,
+        type: "get",
+        success: (result) => {
+          data.bindPopup(pinEdit(result.data));
+        },
+      });
+    });
   });
 };
 
@@ -367,9 +367,9 @@ const renderPins = (pin) => {
 const pinInfo = (pin) => {
   const $pinDesc = `
   <div class="pin-info" data-pin="${pin.pin_id}">
-  <label class="pin-info-title"><strong>${pin.title}</strong></label><br>
-  <label class="pin-info-description"><strong>Description: ${pin.description}</strong></label><br>
-  <img class="pin-info-img" src="${pin.image_url}" style="width: 100%"></img>
+  <label class="pin-info-title"><strong>${pin.title}</strong></label><br><br>
+  <label class="pin-info-description"><strong>Description: ${pin.description}</strong></label><br><br>
+  <img class="pin-info-img" src="${pin.image_url}" style="width: 100%"></img><br><br>
   <div class="pin-info-buttons">
   <button class="delete-pin-btn">Delete</button>
   <button class="edit-pin-btn">Edit</button>
