@@ -82,6 +82,7 @@ const setListeners = () => {
     return $.ajax({
       url: `/api/maps/`,
       data: { name, latitude, longitude },
+      type: "application/json",
       method: "POST",
       success: function (result) {
         location.reload();
@@ -366,8 +367,8 @@ const renderPins = (pin) => {
 const pinInfo = (pin) => {
   const $pinDesc = `
   <div class="pin-info" data-pin="${pin.pin_id}">
-  <label class="pin-info-title">${pin.title}</label><br>
-  <label class="pin-info-description">Description: ${pin.description}</label><br>
+  <label class="pin-info-title"><strong>${pin.title}</strong></label><br>
+  <label class="pin-info-description"><strong>Description: ${pin.description}</strong></label><br>
   <img class="pin-info-img" src="${pin.image_url}" style="width: 100%"></img>
   <div class="pin-info-buttons">
   <button class="delete-pin-btn">Delete</button>
