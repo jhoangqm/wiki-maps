@@ -79,7 +79,7 @@ const setListeners = () => {
     const name = $(this).find("#name").val();
     const latitude = $(this).find("#latitude").val();
     const longitude = $(this).find("#longitude").val();
-    $.ajax({
+    return $.ajax({
       url: `/api/maps/`,
       data: { name, latitude, longitude },
       method: "POST",
@@ -122,6 +122,7 @@ const setListeners = () => {
 
           marker.on("click", function (event) {
             renderPins(data);
+            console.log(data);
           });
         },
       });
