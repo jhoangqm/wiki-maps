@@ -378,20 +378,6 @@ const pinInfo = (pin) => {
   return $pinDesc;
 };
 
-<<<<<<< HEAD
-// Incomplete get pins function
-const getPins = () => {
-  return $.get({
-    url: `/api/pins`,
-    success: function (result) {
-      result.forEach(function (data) {
-        const lat = data.latitude;
-        const lng = data.longitude;
-        L.marker([lat, lng]).addTo(map);
-      });
-    },
-  });
-=======
 // Pin edit form which is generated when clicking edit on pinInfo
 const pinEdit = (pin) => {
   const $pinForm = `
@@ -408,15 +394,8 @@ const pinEdit = (pin) => {
     </div>
   `;
   return $pinForm;
->>>>>>> testing/pins
 };
 
 $(function () {
   getUser();
-<<<<<<< HEAD
-  getPins();
-  setListeners();
-  createPins();
-=======
->>>>>>> testing/pins
 });
