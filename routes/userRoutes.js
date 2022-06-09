@@ -25,7 +25,7 @@ module.exports = (db) => {
   // POST login method
   router.post("/login", (req, res) => {
     const { email, password } = req.body;
-    console.log(req.body);
+    console.log('test',req.body);
     const queryString = `SELECT * FROM users WHERE username = $1;`;
 
     db.query(queryString, [email])
