@@ -60,8 +60,22 @@ const setListeners = () => {
     });
   })
 
-
+  $('#newmapForm').on('submit', function (event) {
+    event.preventDefault();
+    const name = $(this).find('#name').val();
+    const latitude = $(this).find('#latitude').val();
+    const longitude = $(this).find('#longitude').val();
+    $.ajax({
+      url: `/api/maps/`,
+      data: { name, latitude, longitude },
+      type: "application/json",
+      method: "POST",
+      success: function (result) {
+      }
+    });
+  })
 }
+
 
 const setPostLogin = (user) => {
   const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
