@@ -319,13 +319,14 @@ const pinInfo = (pin) => {
   <label class="pin-info-description">Description: ${pin.description}</label><br>
   <img class="pin-info-img" src="${pin.image_url}" style="width: 100%"></img>
   <div class="pin-info-buttons">
-  <button class="delete-marker-btn">Delete</button>
-  <button class="edit-marker-btn">Edit</button>
+  <button class="delete-pin-btn">Delete</button>
+  <button class="edit-pin-btn">Edit</button>
   </div>
 `;
   return $pinDesc;
 };
 
+// Pin edit form which is generated when clicking edit on pinInfo
 const pinEdit = (pin) => {
   const $pinForm = `
     <div class="pin-form-container">
@@ -343,6 +344,42 @@ const pinEdit = (pin) => {
   return $pinForm;
 };
 
+// function that allows edit of a pin not completed
+const editPin = () => {
+  const pinID = $("pin-info").attr("data-pin");
+  $(".edit-pin-btn").on("click", function (e) {
+    e.preventDefault();
+
+    $.ajax({
+      url: `/api/pins/${pinID}`,
+      type: "get",
+      success: (result) => {
+        data.bindPopup(pinEdit(result.data));
+      },
+    });
+  });
+};
+
+// function that allows delete of a pin not completed
+const deletePin = () => {
+  map.eachLayer((mapLayer) => {
+    const pinID = $("pin-info").attr("data-pin");
+    $(".delete-pin-btn").on("click", function (e) {
+      e.preventDefault;
+
+      return $.ajax({
+        url: `/api/pins/${pinID}`,
+        type: "delete",
+        success: (result) => {
+          map.removeLayer(mapLayer);
+          renderPins(result);
+        },
+      });
+    });
+  });
+};
+
 $(function () {
   getUser();
+  deletePin();
 });
