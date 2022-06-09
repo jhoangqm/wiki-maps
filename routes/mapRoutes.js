@@ -73,7 +73,8 @@ module.exports = (db) => {
       .then((data) => {
         const maps = data.rows[0];
         console.log(data.rows[0]);
-        res.json(maps);
+
+        res.status(200).send({ maps });
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });

@@ -83,7 +83,9 @@ const setListeners = () => {
       url: `/api/maps/`,
       data: { name, latitude, longitude },
       method: "POST",
-      success: function (result) {},
+      success: function (result) {
+        location.reload();
+      },
     });
   });
 
