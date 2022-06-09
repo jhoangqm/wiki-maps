@@ -27,6 +27,7 @@ module.exports = (db) => {
     const { email, password } = req.body;
     console.log(req.body);
     const queryString = `SELECT * FROM users WHERE username = $1;`;
+
     db.query(queryString, [email])
       .then((data) => {
         const user = data.rows[0];
@@ -95,32 +96,33 @@ module.exports = (db) => {
 
   // Register user to DB
   router.post("/register", (req, res) => {
-    const { username, password } = req.body;
-    console.log(req.body);
-    if (!username.length || !password.length) {
+    const { email, password } = req.body;
+
+    if (!email.length || !password.length) {
       return res.status(400).send({ error: "Please try again" });
     }
 
-    db.query(`SELECT * from users WHERE username = $1;`, [username])
+    db.query(`SELECT * from users WHERE username = $1;`, [email])
       .then((data) => {
         const user = data.rows[0];
-        console.log(data.rows[0]);
+
         // Check if username exists in the DB and return error message
         if (user) {
           return res.status(403).send({ error: "Username already exists" });
         }
         // Otherwise create username and hash the password
         const hashedPassword = bcrypt.hashSync(password, 10);
-        db.query(
-          `INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *;`,
-          [username, hashedPassword]
+
+        const queryString = `INSERT INTO users (username, password)
+                             VALUES ($1, $2) RETURNING *;`;
+
+        db.query(queryString, [email, hashedPassword]
         )
-          .then((result) => {
-            const user = result.rows[0];
-            console.log(result.rows[0]);
+          .then((data) => {
+            const user = data.rows[0];
+
             req.session.user_id = user.id;
-            console.log(user.id);
-            return res.redirect("/");
+            return res.status(200).send({ ...user });
           })
           .catch((err) => {
             res.status(500).json({ error: err.message });
