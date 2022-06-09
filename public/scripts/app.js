@@ -23,7 +23,25 @@ const setListeners = () => {
       data: { email, password },
       method: "POST",
       success: function (result) {
+        console.log('data:', result);
         setPostLogin(result);
+        getUserFavs(result.id);
+      }
+    });
+  })
+
+  $('#registerForm').on('submit', function (event) {
+    event.preventDefault();
+    const email = $(this).find('#email').val();
+    const password = $(this).find('#password').val();
+
+    $.ajax({
+      url: `/api/users/register`,
+      data: { email, password },
+      method: "POST",
+      success: function (result) {
+        console.log('data1:',result);
+        setPostRegister(result);
         getUserFavs(result.id);
       }
     });
@@ -41,6 +59,8 @@ const setListeners = () => {
       }
     });
   })
+
+
 }
 
 const setPostLogin = (user) => {
@@ -54,6 +74,20 @@ const setPostLogin = (user) => {
 
   if (loginModal != null) {
     loginModal.hide();
+  }
+}
+
+const setPostRegister = (user) => {
+  const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+
+  $('#wikimap-header-login').css('display', 'none');
+  $('#wikimap-header-logout').css('display', 'block');
+  $('#wikimap-header-login-user').text(user.username);
+  $('#wikimap-sidebar').css('visibility', 'visible').animate({ width: '200px', padding: '16px' });
+  $('.wikimap-content').animate({ 'padding-left': '200px' });
+
+  if (registerModal != null) {
+    registerModal.hide();
   }
 }
 
@@ -108,7 +142,7 @@ const getUser = () => {
       getUserFavs(result.id);
     },
     error: function (err) {
-      console.log(err);
+
     }
   });
 }
