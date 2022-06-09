@@ -11,43 +11,42 @@ const implementMap = () => {
   return map;
 };
 
-
 const setListeners = () => {
-  $('#loginForm').on('submit', function (event) {
+  $("#loginForm").on("submit", function (event) {
     event.preventDefault();
-    const email = $(this).find('#email').val();
-    const password = $(this).find('#password').val();
+    const email = $(this).find("#email").val();
+    const password = $(this).find("#password").val();
 
     $.ajax({
       url: `/api/users/login`,
       data: { email, password },
       method: "POST",
       success: function (result) {
-        console.log('data:', result);
+        console.log("data:", result);
         setPostLogin(result);
         getUserFavs(result.id);
-      }
+      },
     });
-  })
+  });
 
-  $('#registerForm').on('submit', function (event) {
+  $("#registerForm").on("submit", function (event) {
     event.preventDefault();
-    const email = $(this).find('#email').val();
-    const password = $(this).find('#password').val();
+    const email = $(this).find("#email").val();
+    const password = $(this).find("#password").val();
 
     $.ajax({
       url: `/api/users/register`,
       data: { email, password },
       method: "POST",
       success: function (result) {
-        console.log('data1:',result);
+        console.log("data1:", result);
         setPostRegister(result);
         getUserFavs(result.id);
-      }
+      },
     });
-  })
+  });
 
-  $('#logoutBtn').on('click', function (event) {
+  $("#logoutBtn").on("click", function (event) {
     event.preventDefault();
 
     $.ajax({
@@ -55,48 +54,56 @@ const setListeners = () => {
       method: "POST",
       success: function (result) {
         setPostLogout();
-        $('#side-nav-body').empty();
-      }
+        $("#side-nav-body").empty();
+      },
     });
-  })
-
-
-}
+  });
+};
 
 const setPostLogin = (user) => {
-  const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
+  const loginModal = bootstrap.Modal.getInstance(
+    document.getElementById("loginModal")
+  );
 
-  $('#wikimap-header-login').css('display', 'none');
-  $('#wikimap-header-logout').css('display', 'block');
-  $('#wikimap-header-login-user').text(user.username);
-  $('#wikimap-sidebar').css('visibility', 'visible').animate({ width: '200px', padding: '16px' });
-  $('.wikimap-content').animate({ 'padding-left': '200px' });
+  $("#wikimap-header-login").css("display", "none");
+  $("#wikimap-header-logout").css("display", "block");
+  $("#wikimap-header-login-user").text(user.username);
+  $("#wikimap-sidebar")
+    .css("visibility", "visible")
+    .animate({ width: "200px", padding: "16px" });
+  $(".wikimap-content").animate({ "padding-left": "200px" });
 
   if (loginModal != null) {
     loginModal.hide();
   }
-}
+};
 
 const setPostRegister = (user) => {
-  const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+  const registerModal = bootstrap.Modal.getInstance(
+    document.getElementById("registerModal")
+  );
 
-  $('#wikimap-header-login').css('display', 'none');
-  $('#wikimap-header-logout').css('display', 'block');
-  $('#wikimap-header-login-user').text(user.username);
-  $('#wikimap-sidebar').css('visibility', 'visible').animate({ width: '200px', padding: '16px' });
-  $('.wikimap-content').animate({ 'padding-left': '200px' });
+  $("#wikimap-header-login").css("display", "none");
+  $("#wikimap-header-logout").css("display", "block");
+  $("#wikimap-header-login-user").text(user.username);
+  $("#wikimap-sidebar")
+    .css("visibility", "visible")
+    .animate({ width: "200px", padding: "16px" });
+  $(".wikimap-content").animate({ "padding-left": "200px" });
 
   if (registerModal != null) {
     registerModal.hide();
   }
-}
+};
 
 const setPostLogout = () => {
-  $('#wikimap-header-login').css('display', 'block');
-  $('#wikimap-header-logout').css('display', 'none');
-  $('#wikimap-sidebar').css('visibility', 'hidden').animate({ width: '0', padding: '0' });
-  $('.wikimap-content').animate({ 'padding-left': '0' });
-}
+  $("#wikimap-header-login").css("display", "block");
+  $("#wikimap-header-logout").css("display", "none");
+  $("#wikimap-sidebar")
+    .css("visibility", "hidden")
+    .animate({ width: "0", padding: "0" });
+  $(".wikimap-content").animate({ "padding-left": "0" });
+};
 
 const getUserFavs = (user_id) => {
   return $.ajax({
@@ -141,19 +148,15 @@ const getUser = () => {
       setPostLogin(result);
       getUserFavs(result.id);
     },
-    error: function (err) {
-
-    }
+    error: function (err) {},
   });
-}
+};
 
 // generates pins on click
 const createPins = () => {
-  let markArr = [];
   window.map.on("click", (event) => {
     let marker = new L.marker([event.latlng.lat, event.latlng.lng]);
     window.map.addLayer(marker);
-    markArr.push(marker);
     marker.bindPopup(renderPins()).openPopup();
     $("label.pinlat").show().text(`latitude: ${event.latlng.lat}`);
     $("label.pinlng").show().text(`longitude: ${event.latlng.lng}`);
@@ -202,8 +205,36 @@ const renderPins = () => {
   return $pinForm;
 };
 
+// pins popup information
+const pinInfo = (pin) => {
+  const $pinDesc = `
+  <div class="pin-info" data-pin="${pin.pin_id}">
+  <label class="pin-info-title">${pin.title}</label>
+  <label class="pin-info-description">${pin.description}</label>
+  <img class="pin-info-img" src="${pin.image_url}" style="width: 400px"></img>
+  <div class="pin-info-buttons">
+  </div>
+`;
+  return $pinDesc;
+};
+
+// Incomplete get pins function
+const getPins = () => {
+  return $.ajax({
+    url: `/api/pins`,
+    success: function (result) {
+      result.forEach(function (data) {
+        const lat = data.lat;
+        const lng = data.lng;
+        const marker = L.marker([lat, lng]).addTo(map);
+      });
+    },
+  });
+};
+
 $(function () {
   window.map = implementMap();
+  window.markers = [];
   getUser();
   setListeners();
   createPins();
