@@ -21,35 +21,35 @@ module.exports = (db) => {
       });
   });
 
-  // GET all pins for user
-  router.get("/:id", (req, res) => {
-    const user_id = req.params.id;
+  // GET all pins for a map
+  router.get("/", (req, res) => {
+    const { map_id } = req.query;
     const queryString = `
     SELECT *
     FROM pins
-    WHERE id = $1;`;
-    db.query(queryString, [user_id])
+    WHERE map_id = $1;`;
+    db.query(queryString, [map_id])
       .then((data) => {
         const pins = data.rows;
-        res.json(pins);
+        console.log(pins);
+        return res.status(200).json(pins);
       })
-      .catch((err) => {
-        res.status(500).json({ error: err.message });
-      });
+      .catch((err) => res.status(500).json({ error: err.message }));
   });
+
   // POST add pin
   router.post("/", (req, res) => {
-    const { owner_id, title, description, latitude, longitude, image_url } =
+    const { map_id, title, description, latitude, longitude, image_url } =
       req.body;
     console.log(req.body);
     const queryString = `
     INSERT INTO pins (
-      owner_id, title, description, image_url, latitude, longitude)
+      map_id, title, description, image_url, latitude, longitude)
       VALUES
       ($1, $2, $3, $4, $5, $6)
       RETURNING *;`;
     db.query(queryString, [
-      owner_id,
+      map_id,
       title,
       description,
       image_url,
@@ -58,12 +58,9 @@ module.exports = (db) => {
     ])
       .then((data) => {
         const pins = data.rows[0];
-        console.log(`/api/pins/:`, pins);
-        res.json(pins);
+        return res.status(200).json(pins);
       })
-      .catch((err) => {
-        res.status(500).json({ error: err.message });
-      });
+      .catch((err) => res.status(500).json({ error: err.message }));
   });
 
   // PATCH edit pin
@@ -99,13 +96,13 @@ module.exports = (db) => {
 
   // POST delete pin
   router.delete("/:id", (req, res) => {
-    const user_id = req.params.id;
+    const pin_id = req.params.id;
     const queryString = `
     DELETE FROM pins
     WHERE id = $1;`;
-    db.query(queryString, [user_id])
+    db.query(queryString, [pin_id])
       .then((data) => {
-        res.json(user_id);
+        res.send(200).json(pin_id);
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });

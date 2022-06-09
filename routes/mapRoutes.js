@@ -62,7 +62,9 @@ module.exports = (db) => {
 
   //POST add map
   router.post("/", (req, res) => {
-    const { owner_id, name, latitude, longitude } = req.body;
+    const { name, latitude, longitude } = req.body;
+    const owner_id = req.session.user_id;
+    console.log("req.body: ", req.body);
     const queryString = `INSERT INTO maps
     (owner_id, name, latitude, longitude)
     VALUES ($1, $2, $3, $4)
@@ -70,7 +72,9 @@ module.exports = (db) => {
     db.query(queryString, [owner_id, name, latitude, longitude])
       .then((data) => {
         const maps = data.rows[0];
-        res.json(maps);
+        console.log(data.rows[0]);
+
+        res.status(200).send({ maps });
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });

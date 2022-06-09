@@ -1,51 +1,59 @@
+let currentMap;
+let map;
+let markArr = [];
+const defaultMapCoordinates = {
+  lat: 43.6478463,
+  lng: -79.3807361,
+};
+
 // Function that generates a map
-const implementMap = () => {
+const implementMap = (lat, lng) => {
   // generates a map
-  const map = L.map("map").setView([43.6478463, -79.3807361], 12);
+  map = L.map("map").setView([lat, lng], 12);
 
   // tile layer retrieved from OpenStreetMap
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
     attribution: "© OpenStreetMap",
   }).addTo(map);
-  return map;
 };
 
 const setListeners = () => {
+  // This is the login event
   $("#loginForm").on("submit", function (event) {
     event.preventDefault();
-    const email = $(this).find("#email").val();
-    const password = $(this).find("#password").val();
+    const email = $(this).find("#loginEmail").val();
+    const password = $(this).find("#loginPassword").val();
 
     $.ajax({
       url: `/api/users/login`,
       data: { email, password },
       method: "POST",
       success: function (result) {
-        console.log("data:", result);
         setPostLogin(result);
         getUserFavs(result.id);
       },
     });
   });
 
+  // This is the register event
   $("#registerForm").on("submit", function (event) {
     event.preventDefault();
-    const email = $(this).find("#email").val();
-    const password = $(this).find("#password").val();
+    const email = $(this).find("#registerEmail").val();
+    const password = $(this).find("#registerPassword").val();
 
     $.ajax({
       url: `/api/users/register`,
       data: { email, password },
       method: "POST",
       success: function (result) {
-        console.log("data1:", result);
         setPostRegister(result);
         getUserFavs(result.id);
       },
     });
   });
 
+  // This is logout event
   $("#logoutBtn").on("click", function (event) {
     event.preventDefault();
 
@@ -55,8 +63,103 @@ const setListeners = () => {
       success: function (result) {
         setPostLogout();
         $("#side-nav-body").empty();
+
+        markArr.forEach((element) => {
+          map.removeLayer(element);
+        });
+
+        markArr = [];
       },
     });
+  });
+
+  // Creates map on form submission NOT COMPLETE
+  $("#newmapForm").on("submit", function (event) {
+    event.preventDefault();
+    const name = $(this).find("#name").val();
+    const latitude = $(this).find("#latitude").val();
+    const longitude = $(this).find("#longitude").val();
+    return $.ajax({
+      url: `/api/maps/`,
+      data: { name, latitude, longitude },
+      type: "application/json",
+      method: "POST",
+      success: function (result) {
+        location.reload();
+      },
+    });
+  });
+
+  // Creates a pin on click
+  map.on("click", function (event) {
+    const coordinates = {
+      lat: event.latlng.lat,
+      lng: event.latlng.lng,
+    };
+    const marker = new L.marker([coordinates.lat, coordinates.lng]);
+    map.addLayer(marker);
+    markArr.push(marker);
+    marker.bindPopup(renderPins()).openPopup();
+
+    $("#pinForm").on("submit", function (event) {
+      event.preventDefault();
+      const title = $(this).find("#title").val();
+      const description = $(this).find("#description").val();
+      const image_url = $(this).find("#image_url").val();
+
+      $.ajax({
+        url: "/api/pins",
+        method: "POST",
+        data: {
+          title,
+          description,
+          image_url,
+          latitude: coordinates.lat,
+          longitude: coordinates.lng,
+          map_id: currentMap,
+        },
+        success: function (data) {
+          markArr.push(marker);
+          marker.closePopup();
+          marker.unbindPopup();
+
+          marker.on("click", function (event) {
+            renderPins(data);
+            console.log(data);
+          });
+        },
+      });
+    });
+
+    // this is the delete event NOT COMPLETED YET
+    map.eachLayer((mapLayer) => {
+      const pinID = $("pin-info").attr("data-pin");
+      $(".delete-pin-btn").on("click", function (e) {
+        e.preventDefault;
+
+        return $.ajax({
+          url: `/api/pins/${pinID}`,
+          type: "delete",
+          success: (result) => {
+            map.removeLayer(mapLayer);
+            getPins(result);
+          },
+        });
+      });
+    });
+
+    // this is the edit event NOT COMPLETED YET
+    // $(".edit-pin-btn").on("click", function (e) {
+    //   e.preventDefault();
+
+    //   $.ajax({
+    //     url: `/api/pins/${pinID}`,
+    //     type: "get",
+    //     success: (result) => {
+    //       data.bindPopup(pinEdit(result.data));
+    //     },
+    //   });
+    // });
   });
 };
 
@@ -114,27 +217,92 @@ const getUserFavs = (user_id) => {
     method: "GET",
     success: function (result) {
       let favs = "";
+      let coordinates = {
+        lat: defaultMapCoordinates.lat,
+        lng: defaultMapCoordinates.lng,
+      };
 
-      result.forEach((element) => {
-        favs += `
-          <button
-            type="button"
-            class="list-group-item list-group-item-action bg-transparent text-white cities"
-            data-lat="${element.latitude}"
-            data-long="${element.longitude}"
-          >
-            ${element.name}
-          </button>
-        `;
-      });
+      if (result.length > 0) {
+        result.forEach((element, index) => {
+          let selectedMap = "text-light";
+          if (index === 0) {
+            selectedMap = "text-warning";
+          }
+
+          favs += `
+            <button
+              type="button"
+              class="list-group-item list-group-item-action bg-transparent cities ${selectedMap}"
+              data-lat="${element.latitude}"
+              data-lng="${element.longitude}"
+              data-id="${element.id}"
+            >
+              ${element.name}
+            </button>
+          `;
+        });
+
+        currentMap = result[0].id;
+      }
 
       $("#side-nav-body").append(favs);
+
+      if (result.length > 0) {
+        coordinates = {
+          lat: result[0].latitude,
+          lng: result[0].longitude,
+        };
+
+        getPins(currentMap);
+      }
+
+      if (map == null) {
+        implementMap(coordinates.lat, coordinates.lng);
+        setListeners();
+      } else {
+        map.flyTo([coordinates.lat, coordinates.lng], 12);
+      }
 
       //sidebar maps
       $(".cities").on("click", function (event) {
         const lat = $(this).data("lat");
-        const long = $(this).data("long");
-        map.flyTo([lat, long], 12);
+        const lng = $(this).data("lng");
+
+        $(`button[data-id="${$(this).data("id")}"]`)
+          .addClass("text-warning")
+          .removeClass("text-light");
+        $(`button[data-id="${currentMap}"]`)
+          .addClass("text-light")
+          .removeClass("text-warning");
+
+        currentMap = $(this).data("id");
+
+        markArr.forEach((element) => {
+          map.removeLayer(element);
+        });
+
+        getPins(currentMap, lat, lng);
+
+        map.flyTo([lat, lng], 12);
+      });
+    },
+  });
+};
+
+const getPins = (currentMapId, lat, lng) => {
+  $.ajax({
+    url: "/api/pins",
+    method: "GET",
+    data: { map_id: currentMapId },
+    success: function (data) {
+      data.forEach((element) => {
+        let marker = new L.marker([element.latitude, element.longitude]);
+        map.addLayer(marker);
+        markArr.push(marker);
+
+        marker.on("click", function (event) {
+          marker.bindPopup(pinInfo(element)).openPopup();
+        });
       });
     },
   });
@@ -148,76 +316,69 @@ const getUser = () => {
       setPostLogin(result);
       getUserFavs(result.id);
     },
-    error: function (err) {},
-  });
-};
-
-// generates pins on click
-const createPins = () => {
-  window.map.on("click", (event) => {
-    let marker = new L.marker([event.latlng.lat, event.latlng.lng]);
-    window.map.addLayer(marker);
-    marker.bindPopup(renderPins()).openPopup();
-    $("label.pinlat").show().text(`latitude: ${event.latlng.lat}`);
-    $("label.pinlng").show().text(`longitude: ${event.latlng.lng}`);
-    $("input.pinlat").val(event.latlng.lat);
-    $("input.pinlng").val(event.latlng.lng);
-
-    marker.getPopup().on("remove", function () {
-      window.map.removeLayer(marker);
-    });
-
-    $(".pin-form").on("submit", function (e) {
-      e.preventDefault();
-
-      let content = $(this).serialize();
-      console.log(content);
-
-      return $.post(`/api/pins`, content, (data) => {
-        console.log(data);
-        window.markers.push(marker);
-        marker.closePopup();
-        marker.unbindPopup();
-        marker.bindPopup(data.content);
-        console.log(data.content);
-      });
-    });
+    error: function (err) {
+      implementMap(defaultMapCoordinates.lat, defaultMapCoordinates.lng);
+      setListeners();
+    },
   });
 };
 
 //Pin form that can be called when rendering a marker
-const renderPins = () => {
-  const $pinForm = `
-  <div class="pin-form-container">
-  <form class="pin-form">
-    <label for="title"> Pin Name:</label><br>
-    <input type="text" name="title" id="name" placeholder="New Pin"/><br>
-    <input type="textarea" name="description" placeholder="description"/><br>
-    <input type="text" name="image_url" id="image" placeholder="image url" /><br>
-    <label for="latitude" class="pinlat" hidden></label><br>
-    <input type="text" class="pinlat" name="latitude" hidden />
-    <label for="longitude" class="pinlng" hidden></label><br>
-    <input type="text" class="pinlng" name="longitude" hidden/>
-    <button class="submit" type="submit">submit</button>
-  </form>
-</div>
-    `;
-  return $pinForm;
+const renderPins = (pin) => {
+  let buttonDisplayClass = "";
+  let currentPin = {
+    title: "",
+    description: "",
+    image_url: "",
+  };
+
+  if (pin != null) {
+    currentPin = pin;
+    buttonDisplayClass = "d-none";
+  }
+
+  return `
+    <form id="pinForm" class="pin-form-container">
+      <div class="mb-3 row">
+        <div class="col">
+          <input type="text" class="form-control" id="title" placeholder="New Pin" value="${currentPin.title}">
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <div class="col">
+          <input type="text" class="form-control" id="description" placeholder="Description" value="${currentPin.description}">
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <div class="col">
+          <input type="text" class="form-control" id="image_url" placeholder="Image URL" value="${currentPin.image_url}">
+        </div>
+      </div>
+      <div class="mb-3 row ${buttonDisplayClass}">
+        <div class="col d-flex justify-content-end">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </form>
+  `;
 };
 
 // pins popup information
 const pinInfo = (pin) => {
   const $pinDesc = `
   <div class="pin-info" data-pin="${pin.pin_id}">
-  <label class="pin-info-title">${pin.title}</label>
-  <label class="pin-info-description">${pin.description}</label>
-  <img class="pin-info-img" src="${pin.image_url}" style="width: 400px"></img>
+  <label class="pin-info-title"><strong>${pin.title}</strong></label><br>
+  <label class="pin-info-description"><strong>Description: ${pin.description}</strong></label><br>
+  <img class="pin-info-img" src="${pin.image_url}" style="width: 100%"></img>
   <div class="pin-info-buttons">
+  <button class="delete-pin-btn">Delete</button>
+  <button class="edit-pin-btn">Edit</button>
   </div>
 `;
   return $pinDesc;
 };
 
+<<<<<<< HEAD
 // Incomplete get pins function
 const getPins = () => {
   return $.get({
@@ -230,13 +391,32 @@ const getPins = () => {
       });
     },
   });
+=======
+// Pin edit form which is generated when clicking edit on pinInfo
+const pinEdit = (pin) => {
+  const $pinForm = `
+    <div class="pin-form-container">
+      <p class="add-pin-header">Edit pin</p>
+      <form class="edit-pin-form">
+        <input type="text" id="pinName" name="pinName" placeholder="Title" value="${pin.title}"></input>
+        <input type="textarea" id="pinDesc" name="pinDesc" placeholder="Description" value="${pin.description}"></input>
+        <input type="text" id="pinImgUrl" name="pinImgUrl" placeholder="Image URL" value="${pin.image_url}"></input>
+        <div class="edit-pin-form-button">
+          <button><strong>Edit</strong></button>
+        </div>
+      </form>
+    </div>
+  `;
+  return $pinForm;
+>>>>>>> testing/pins
 };
 
 $(function () {
-  window.map = implementMap();
-  window.markers = [];
   getUser();
+<<<<<<< HEAD
   getPins();
   setListeners();
   createPins();
+=======
+>>>>>>> testing/pins
 });
