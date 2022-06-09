@@ -249,7 +249,7 @@ const getPins = (currentMapId, lat, lng) => {
         markArr.push(marker);
 
         marker.on("click", function (event) {
-          marker.bindPopup(renderPins(element)).openPopup();
+          marker.bindPopup(pinInfo(element)).openPopup();
         });
       });
     },
@@ -315,13 +315,32 @@ const renderPins = (pin) => {
 const pinInfo = (pin) => {
   const $pinDesc = `
   <div class="pin-info" data-pin="${pin.pin_id}">
-  <label class="pin-info-title">${pin.title}</label>
-  <label class="pin-info-description">${pin.description}</label>
-  <img class="pin-info-img" src="${pin.image_url}" style="width: 400px"></img>
+  <label class="pin-info-title">${pin.title}</label><br>
+  <label class="pin-info-description">Description: ${pin.description}</label><br>
+  <img class="pin-info-img" src="${pin.image_url}" style="width: 100%"></img>
   <div class="pin-info-buttons">
+  <button class="delete-marker-btn">Delete</button>
+  <button class="edit-marker-btn">Edit</button>
   </div>
 `;
   return $pinDesc;
+};
+
+const pinEdit = (pin) => {
+  const $pinForm = `
+    <div class="pin-form-container">
+      <p class="add-pin-header">Edit pin</p>
+      <form class="edit-pin-form">
+        <input type="text" id="pinName" name="pinName" placeholder="Title" value="${pin.title}"></input>
+        <input type="textarea" id="pinDesc" name="pinDesc" placeholder="Description" value="${pin.description}"></input>
+        <input type="text" id="pinImgUrl" name="pinImgUrl" placeholder="Image URL" value="${pin.image_url}"></input>
+        <div class="edit-pin-form-button">
+          <button><strong>Edit</strong></button>
+        </div>
+      </form>
+    </div>
+  `;
+  return $pinForm;
 };
 
 $(function () {
