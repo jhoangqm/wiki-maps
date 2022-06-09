@@ -83,6 +83,7 @@ const setListeners = () => {
       type: "application/json",
       method: "POST",
       success: function (result) {
+        location.reload()
       }
     });
   })
