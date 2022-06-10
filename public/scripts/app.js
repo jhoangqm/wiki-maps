@@ -288,16 +288,16 @@ const getPins = (currentMapId, lat, lng) => {
             });
           });
 
-          // EDIT pin button
+          // EDIT pin button currently working on this
           $(".pin-info-buttons .edit-pin-btn").on("click", function (event) {
             const pin = $(this).closest(".pin-info");
             const pin_id = pin.attr("data-id");
-            console.log("test", pin_id);
+            console.log("pin_id: ", pin_id);
             return $.ajax({
               url: `/api/pins/${pin_id}`,
               method: "patch",
               success: function (data) {
-                marker.bindPopup(pinEdit(data)).openPopup();
+                console.log(data);
               },
             });
           });
