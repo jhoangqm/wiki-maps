@@ -130,36 +130,6 @@ const setListeners = () => {
         },
       });
     });
-
-    // this is the delete event NOT COMPLETED YET
-    map.eachLayer((mapLayer) => {
-      const pinID = $("pin-info").attr("data-pin");
-      $(".delete-pin-btn").on("click", function (e) {
-        e.preventDefault;
-
-        return $.ajax({
-          url: `/api/pins/${pinID}`,
-          type: "delete",
-          success: (result) => {
-            map.removeLayer(mapLayer);
-            getPins(result);
-          },
-        });
-      });
-    });
-
-    const pinID = $("pin-info").attr("data-pin");
-    $(".edit-pin-btn").on("click", function (e) {
-      e.preventDefault();
-
-      $.ajax({
-        url: `/api/pins/${pinID}`,
-        type: "get",
-        success: (result) => {
-          data.bindPopup(pinEdit(result.data));
-        },
-      });
-    });
   });
 };
 
@@ -289,6 +259,7 @@ const getUserFavs = (user_id) => {
   });
 };
 
+// GET pins function
 const getPins = (currentMapId, lat, lng) => {
   $.ajax({
     url: "/api/pins",
@@ -302,6 +273,34 @@ const getPins = (currentMapId, lat, lng) => {
 
         marker.on("click", function (event) {
           marker.bindPopup(pinInfo(element)).openPopup();
+
+          // DELETE pin button
+          $(".pin-info-buttons .delete-pin-btn").on("click", function (event) {
+            const pin = $(this).closest(".pin-info");
+            const pin_id = pin.attr("data-id");
+            console.log("test", pin_id);
+            return $.ajax({
+              url: `/api/pins/${pin_id}`,
+              method: "delete",
+              success: function (data) {
+                location.reload();
+              },
+            });
+          });
+
+          // EDIT pin button
+          $(".pin-info-buttons .edit-pin-btn").on("click", function (event) {
+            const pin = $(this).closest(".pin-info");
+            const pin_id = pin.attr("data-id");
+            console.log("test", pin_id);
+            return $.ajax({
+              url: `/api/pins/${pin_id}`,
+              method: "patch",
+              success: function (data) {
+                marker.bindPopup(pinEdit(data)).openPopup();
+              },
+            });
+          });
         });
       });
     },
@@ -366,13 +365,13 @@ const renderPins = (pin) => {
 // pins popup information
 const pinInfo = (pin) => {
   const $pinDesc = `
-  <div class="pin-info" data-pin="${pin.pin_id}">
-  <label class="pin-info-title"><strong>${pin.title}</strong></label><br><br>
-  <label class="pin-info-description"><strong>Description: ${pin.description}</strong></label><br><br>
-  <img class="pin-info-img" src="${pin.image_url}" style="width: 100%"></img><br><br>
+  <div data-id="${pin.id}" class="pin-info"}">
+  <label class="pin-info-title">${pin.title}</label><br>
+  <label class="pin-info-description">Description: ${pin.description}</label><br>
+  <img class="pin-info-img" src="${pin.image_url}" style="width: 100%"></img>
   <div class="pin-info-buttons">
-  <button class="delete-pin-btn">Delete</button>
-  <button class="edit-pin-btn">Edit</button>
+  <button id=deletePinButton class="delete-pin-btn btn btn-primary">Delete</button>
+  <button class="edit-pin-btn btn btn-primary">Edit</button>
   </div>
 `;
   return $pinDesc;
