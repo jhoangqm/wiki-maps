@@ -62,21 +62,29 @@ module.exports = (db) => {
 
   //POST add map
   router.post("/", (req, res) => {
-    const { name, latitude, longitude } = req.body;
+    const { name } = req.body;
     const owner_id = req.session.user_id;
-    console.log("req.body: ", req.body);
-    const queryString = `INSERT INTO maps
+    const getCitiesQuery = `SELECT * FROM maps
+    WHERE name = '${name}';`;
+    db.query(getCitiesQuery)
+      .then((data) => {
+        const map = data.rows[0];
+        const queryString = `INSERT INTO maps
     (owner_id, name, latitude, longitude)
     VALUES ($1, $2, $3, $4)
     RETURNING *;`;
-    db.query(queryString, [owner_id, name, latitude, longitude])
-      .then((data) => {
-        const maps = data.rows[0];
-        console.log(data.rows[0]);
-
-        res.status(200).send({ maps });
+        db.query(queryString, [
+          owner_id,
+          name,
+          map.latitude,
+          map.longitude,
+        ]).then((data) => {
+          const map = data.rows[0];
+          res.json(map);
+        });
       })
       .catch((err) => {
+        console.log(err);
         res.status(500).json({ error: err.message });
       });
   });
