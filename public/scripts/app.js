@@ -285,10 +285,10 @@ const getPins = (currentMapId, lat, lng) => {
                 marker.bindPopup(pinEdit(element));
                 // After opening the edit form
                 $(".edit-pin-form-button").on("click", function (e) {
-                  const editData = $(this).serialize();
                   return $.ajax({
                     url: `/api/pins/${pin_id}`,
                     method: "patch",
+                    data,
                     success: function (editedData) {},
                   });
                 });
@@ -391,12 +391,10 @@ const pinEdit = (pin) => {
     <div class="pin-form-container">
       <p class="add-pin-header">Edit pin</p>
       <form class="edit-pin-form">
-        <input type="text" id="pinName" name="pinName" placeholder="Title" value="${pin.title}"></input><br><br>
-        <input type="textarea" id="pinDesc" name="pinDesc" placeholder="Description" value="${pin.description}"></input><br><br>
-        <input type="text" id="pinImgUrl" name="pinImgUrl" placeholder="Image URL" value="${pin.image_url}"></input><br><br>
-        <div class="edit-pin-form-button">
-          <button><strong>Edit</strong></button>
-        </div>
+        <input type="text" id="pinName" name="title" placeholder="Title" value="${pin.title}"></input><br><br>
+        <input type="textarea" id="pinDesc" name="description" placeholder="Description" value="${pin.description}"></input><br><br>
+        <input type="text" id="pinImgUrl" name="image_url" placeholder="Image URL" value="${pin.image_url}"></input><br><br>
+          <button class="edit-pin-form-button btn btn-primary">Edit</button>
       </form>
     </div>
   `;
