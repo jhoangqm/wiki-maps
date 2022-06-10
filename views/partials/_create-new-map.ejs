@@ -1,35 +1,40 @@
-<div class="modal fade" id="newmapModal" tabindex="-1" aria-labelledby="newmapModal" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <form id="newmapForm">
-          <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title" id="new-mapModal">Create New Map</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body p-4">
-            <div class="mb-3 row">
-              <label for="name" name="name" class="col-sm-2 col-form-label">City Name</label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control" id="name">
-              </div>
-            </div>
-            <div class="mb-3 row">
-                <div class="mb-3 row">
-                    <label for="latitude" class="col-sm-2 col-form-label">latitude</label>
-                    <div class="col-sm-10">
-                      <input type="latitude" class="form-control" id="latitude">
-                    </div>
-                  </div>
-              <label for="longitude" class="col-sm-2 col-form-label">longitude</label>
-              <div class="col-sm-10">
-                <input type="longitude" class="form-control" id="longitude">
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Create</button>
-          </div>
-        </form>
-      </div>
+<div
+  class="modal fade"
+  id="newmapModal"
+  tabindex="-1"
+  aria-labelledby="newmapModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form id="newmapForm">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="new-mapModal">Create New Map</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <select
+          class="form-select"
+          id="dropdown-cities"
+          aria-label="Default select example"
+        >
+          <option selected>Select a city</option>
+          <option value="Toronto">Halifax</option>
+          <option value="London">London</option>
+          <option value="Montreal">Montreal</option>
+          <option value="Toronto">Toronto</option>
+          <option value="Quebec City">Quebec City</option>
+          <option value="Vancouver">Vancouver</option>
+          <option value="Winnipeg">Winnipeg</option>
+        </select>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+      </form>
     </div>
   </div>
+</div>

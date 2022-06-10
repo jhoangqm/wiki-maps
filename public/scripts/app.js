@@ -74,12 +74,11 @@ const setListeners = () => {
 
   $('#newmapForm').on('submit', function (event) {
     event.preventDefault();
-    const name = $(this).find('#name').val();
-    const latitude = $(this).find('#latitude').val();
-    const longitude = $(this).find('#longitude').val();
+    const name = $(this).find('#dropdown-cities').val();
+    console.log(name);
     $.ajax({
       url: `/api/maps/`,
-      data: { name, latitude, longitude },
+      data: {name},
       type: "application/json",
       method: "POST",
       success: function (result) {
