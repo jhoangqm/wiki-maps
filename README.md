@@ -1,10 +1,12 @@
-# LHL Node Skeleton
-
-## WIKI MAPS app
+# WIKI MAPS app
 
 Map this! is an application that displays pins and maps of a user. Users can create a user defined map, and add or remove pins from the map.
 
 It was built using the Leaflet.js API, it uses the API to render the map,add and remove pins.
+
+#### Contributions:
+
+[Jimmy Hoang](https://github.com/jhoangqm), [Eduardo Castro](https://github.com/educastroa), [Mohamed Hassan](https://github.com/MHassan47)
 
 ## Tech Stack
 
