@@ -289,7 +289,12 @@ const getPins = (currentMapId, lat, lng) => {
                     url: `/api/pins/${pin_id}`,
                     method: "patch",
                     data,
-                    success: function (editedData) {},
+                    success: function (editedData) {
+                      marker.bindPopup(editedData.data).closePopup();
+                    },
+                    error: (err) => {
+                      alert(err.responseJSON.message);
+                    },
                   });
                 });
               },
@@ -305,7 +310,7 @@ const getPins = (currentMapId, lat, lng) => {
               url: `/api/pins/${pin_id}`,
               method: "delete",
               success: function (data) {
-                location.reload();
+                location.reload(data);
               },
             });
           });
