@@ -273,6 +273,30 @@ const getPins = (currentMapId, lat, lng) => {
         marker.on("click", function (event) {
           marker.bindPopup(pinInfo(element)).openPopup();
 
+          // EDIT pin button currently working on this
+          $(".edit-pin-btn").on("click", function (event) {
+            const pin_id = $(this).closest(".pin-info").attr("data-id");
+            console.log("pin_id: ", pin_id);
+            $.ajax({
+              url: `/api/pins`,
+              method: "GET",
+              data: { map_id: currentMapId },
+              success: function (data) {
+                marker.bindPopup(pinEdit(element)).openPopup();
+                // After opening the edit form
+                $(".edit-pin-form").on("click", function (e) {
+                  return $.ajax({
+                    url: `/api/pins/${pin_id}`,
+                    method: "patch",
+                    success: function (editedData) {
+                      marker.bindPopup(pinInfo(editedData)).closePopup();
+                    },
+                  });
+                });
+              },
+            });
+          });
+
           // DELETE pin button
           $(".pin-info-buttons .delete-pin-btn").on("click", function (event) {
             const pin = $(this).closest(".pin-info");
@@ -283,20 +307,6 @@ const getPins = (currentMapId, lat, lng) => {
               method: "delete",
               success: function (data) {
                 location.reload();
-              },
-            });
-          });
-
-          // EDIT pin button currently working on this
-          $(".pin-info-buttons .edit-pin-btn").on("click", function (event) {
-            const pin = $(this).closest(".pin-info");
-            const pin_id = pin.attr("data-id");
-            console.log("pin_id: ", pin_id);
-            return $.ajax({
-              url: `/api/pins/${pin_id}`,
-              method: "patch",
-              success: function (data) {
-                console.log(data);
               },
             });
           });
@@ -365,8 +375,8 @@ const renderPins = (pin) => {
 const pinInfo = (pin) => {
   const $pinDesc = `
   <div data-id="${pin.id}" class="pin-info"}">
-  <label class="pin-info-title">${pin.title}</label><br>
-  <label class="pin-info-description">Description: ${pin.description}</label><br>
+  <label class="pin-info-title">${pin.title}</label><br><br>
+  <label class="pin-info-description">Description: ${pin.description}</label><br><br>
   <img class="pin-info-img" src="${pin.image_url}" style="width: 100%"></img>
   <div class="pin-info-buttons">
   <button id=deletePinButton class="delete-pin-btn btn btn-primary">Delete</button>
@@ -382,9 +392,9 @@ const pinEdit = (pin) => {
     <div class="pin-form-container">
       <p class="add-pin-header">Edit pin</p>
       <form class="edit-pin-form">
-        <input type="text" id="pinName" name="pinName" placeholder="Title" value="${pin.title}"></input>
-        <input type="textarea" id="pinDesc" name="pinDesc" placeholder="Description" value="${pin.description}"></input>
-        <input type="text" id="pinImgUrl" name="pinImgUrl" placeholder="Image URL" value="${pin.image_url}"></input>
+        <input type="text" id="pinName" name="pinName" placeholder="Title" value="${pin.title}"></input><br><br>
+        <input type="textarea" id="pinDesc" name="pinDesc" placeholder="Description" value="${pin.description}"></input><br><br>
+        <input type="text" id="pinImgUrl" name="pinImgUrl" placeholder="Image URL" value="${pin.image_url}"></input><br><br>
         <div class="edit-pin-form-button">
           <button><strong>Edit</strong></button>
         </div>
