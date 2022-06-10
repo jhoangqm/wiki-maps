@@ -65,7 +65,8 @@ module.exports = (db) => {
 
   // PATCH edit pin
   router.patch("/:id", (req, res) => {
-    const map_id = req.params.id;
+    const pin_id = req.params.id;
+    const userID = req.session.user_id;
     const { title, description, image_url } = req.body;
     console.log(req.body);
 
@@ -77,16 +78,16 @@ module.exports = (db) => {
     //   .then((result) => {
     const queryString = `
       UPDATE pins
-      SET title = $1,
-      description = $2,
-      image_url = $3,
-      AND map_id = $4
+      SET map_id = $1,
+      title = $2,
+      description = $3,
+      image_url = $4
       RETURNING *;`;
-    db.query(queryString, [title, description, image_url, map_id])
+    db.query(queryString, [pin_id, title, description, image_url, userID])
 
       .then((data) => {
-        const pins = data.rows;
-        console.log(data.rows[0]);
+        const pins = data.rows[0];
+        console.log(data.rows);
         res.json(pins);
       })
       .catch((err) => {

@@ -391,9 +391,9 @@ const pinEdit = (pin) => {
     <div class="pin-form-container">
       <p class="add-pin-header">Edit pin</p>
       <form class="edit-pin-form">
-        <input type="text" id="pinName" name="title" placeholder="Title" value="${pin.title}"></input><br><br>
-        <input type="textarea" id="pinDesc" name="description" placeholder="Description" value="${pin.description}"></input><br><br>
-        <input type="text" id="pinImgUrl" name="image_url" placeholder="Image URL" value="${pin.image_url}"></input><br><br>
+        <input type="text" id="title" name="title" placeholder="Title" value="${pin.title}"></input><br><br>
+        <input type="textarea" id="description" name="description" placeholder="Description" value="${pin.description}"></input><br><br>
+        <input type="text" id="image_url" name="image_url" placeholder="Image URL" value="${pin.image_url}"></input><br><br>
           <button class="edit-pin-form-button btn btn-primary">Edit</button>
       </form>
     </div>
