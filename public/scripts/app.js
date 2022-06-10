@@ -282,15 +282,14 @@ const getPins = (currentMapId, lat, lng) => {
               method: "GET",
               data: { map_id: currentMapId },
               success: function (data) {
-                marker.bindPopup(pinEdit(element)).openPopup();
+                marker.bindPopup(pinEdit(element));
                 // After opening the edit form
-                $(".edit-pin-form").on("click", function (e) {
+                $(".edit-pin-form-button").on("click", function (e) {
+                  const editData = $(this).serialize();
                   return $.ajax({
                     url: `/api/pins/${pin_id}`,
                     method: "patch",
-                    success: function (editedData) {
-                      marker.bindPopup(pinInfo(editedData)).closePopup();
-                    },
+                    success: function (editedData) {},
                   });
                 });
               },
