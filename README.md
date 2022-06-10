@@ -29,7 +29,7 @@ _User Profile_
 _User can create a map_
 ![Create Map](https://github.com/jhoangqm/midterm/blob/master/public/assets/midterm4.png?raw=true)
 _User can add,remove,edit pin_
-![Pins](https://github.com/jhoangqm/midterm/blob/master/public/assets/midterm1.png?raw=true)
+![Pins](https://github.com/jhoangqm/midterm/blob/master/public/assets/addpin.png?raw=true)
 
 ## Project Setup
 
